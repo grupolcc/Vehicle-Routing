@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,8 +10,8 @@ namespace VehicleRouting.Results
     {
         public ChallengeResult(string loginProvider, ApiController controller)
         {
-            LoginProvider = loginProvider;
-            Request = controller.Request;
+            this.LoginProvider = loginProvider;
+            this.Request = controller.Request;
         }
 
         public string LoginProvider { get; set; }
@@ -22,10 +19,10 @@ namespace VehicleRouting.Results
 
         public Task<HttpResponseMessage> ExecuteAsync(CancellationToken cancellationToken)
         {
-            Request.GetOwinContext().Authentication.Challenge(LoginProvider);
+            this.Request.GetOwinContext().Authentication.Challenge(this.LoginProvider);
 
             HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.Unauthorized);
-            response.RequestMessage = Request;
+            response.RequestMessage = this.Request;
             return Task.FromResult(response);
         }
     }

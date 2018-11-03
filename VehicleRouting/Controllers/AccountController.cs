@@ -6,7 +6,6 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using System.Web.Http.ModelBinding;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -33,19 +32,19 @@ namespace VehicleRouting.Controllers
         public AccountController(ApplicationUserManager userManager,
             ISecureDataFormat<AuthenticationTicket> accessTokenFormat)
         {
-            UserManager = userManager;
-            AccessTokenFormat = accessTokenFormat;
+            this.UserManager = userManager;
+            this.AccessTokenFormat = accessTokenFormat;
         }
 
         public ApplicationUserManager UserManager
         {
             get
             {
-                return _userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                return this._userManager ?? this.Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
             }
             private set
             {
-                _userManager = value;
+                this._userManager = value;
             }
         }
 
@@ -56,11 +55,11 @@ namespace VehicleRouting.Controllers
         [Route("UserInfo")]
         public UserInfoViewModel GetUserInfo()
         {
-            ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
+            ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(this.User.Identity as ClaimsIdentity);
 
             return new UserInfoViewModel
             {
-                Email = User.Identity.GetUserName(),
+                Email = this.User.Identity.GetUserName(),
                 HasRegistered = externalLogin == null,
                 LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null
             };
@@ -70,15 +69,15 @@ namespace VehicleRouting.Controllers
         [Route("Logout")]
         public IHttpActionResult Logout()
         {
-            Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
-            return Ok();
+            this.Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
+            return this.Ok();
         }
 
         // GET api/Account/ManageInfo?returnUrl=%2F&generateState=true
         [Route("ManageInfo")]
         public async Task<ManageInfoViewModel> GetManageInfo(string returnUrl, bool generateState = false)
         {
-            IdentityUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            IdentityUser user = await this.UserManager.FindByIdAsync(this.User.Identity.GetUserId());
 
             if (user == null)
             {
@@ -110,7 +109,7 @@ namespace VehicleRouting.Controllers
                 LocalLoginProvider = LocalLoginProvider,
                 Email = user.UserName,
                 Logins = logins,
-                ExternalLoginProviders = GetExternalLogins(returnUrl, generateState)
+                ExternalLoginProviders = this.GetExternalLogins(returnUrl, generateState)
             };
         }
 
@@ -118,106 +117,106 @@ namespace VehicleRouting.Controllers
         [Route("ChangePassword")]
         public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return this.BadRequest(this.ModelState);
             }
 
-            IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
+            IdentityResult result = await this.UserManager.ChangePasswordAsync(this.User.Identity.GetUserId(), model.OldPassword,
                 model.NewPassword);
             
             if (!result.Succeeded)
             {
-                return GetErrorResult(result);
+                return this.GetErrorResult(result);
             }
 
-            return Ok();
+            return this.Ok();
         }
 
         // POST api/Account/SetPassword
         [Route("SetPassword")]
         public async Task<IHttpActionResult> SetPassword(SetPasswordBindingModel model)
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return this.BadRequest(this.ModelState);
             }
 
-            IdentityResult result = await UserManager.AddPasswordAsync(User.Identity.GetUserId(), model.NewPassword);
+            IdentityResult result = await this.UserManager.AddPasswordAsync(this.User.Identity.GetUserId(), model.NewPassword);
 
             if (!result.Succeeded)
             {
-                return GetErrorResult(result);
+                return this.GetErrorResult(result);
             }
 
-            return Ok();
+            return this.Ok();
         }
 
         // POST api/Account/AddExternalLogin
         [Route("AddExternalLogin")]
         public async Task<IHttpActionResult> AddExternalLogin(AddExternalLoginBindingModel model)
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return this.BadRequest(this.ModelState);
             }
 
-            Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+            this.Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
 
-            AuthenticationTicket ticket = AccessTokenFormat.Unprotect(model.ExternalAccessToken);
+            AuthenticationTicket ticket = this.AccessTokenFormat.Unprotect(model.ExternalAccessToken);
 
             if (ticket == null || ticket.Identity == null || (ticket.Properties != null
                 && ticket.Properties.ExpiresUtc.HasValue
                 && ticket.Properties.ExpiresUtc.Value < DateTimeOffset.UtcNow))
             {
-                return BadRequest("External login failure.");
+                return this.BadRequest("External login failure.");
             }
 
             ExternalLoginData externalData = ExternalLoginData.FromIdentity(ticket.Identity);
 
             if (externalData == null)
             {
-                return BadRequest("The external login is already associated with an account.");
+                return this.BadRequest("The external login is already associated with an account.");
             }
 
-            IdentityResult result = await UserManager.AddLoginAsync(User.Identity.GetUserId(),
+            IdentityResult result = await this.UserManager.AddLoginAsync(this.User.Identity.GetUserId(),
                 new UserLoginInfo(externalData.LoginProvider, externalData.ProviderKey));
 
             if (!result.Succeeded)
             {
-                return GetErrorResult(result);
+                return this.GetErrorResult(result);
             }
 
-            return Ok();
+            return this.Ok();
         }
 
         // POST api/Account/RemoveLogin
         [Route("RemoveLogin")]
         public async Task<IHttpActionResult> RemoveLogin(RemoveLoginBindingModel model)
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return this.BadRequest(this.ModelState);
             }
 
             IdentityResult result;
 
             if (model.LoginProvider == LocalLoginProvider)
             {
-                result = await UserManager.RemovePasswordAsync(User.Identity.GetUserId());
+                result = await this.UserManager.RemovePasswordAsync(this.User.Identity.GetUserId());
             }
             else
             {
-                result = await UserManager.RemoveLoginAsync(User.Identity.GetUserId(),
+                result = await this.UserManager.RemoveLoginAsync(this.User.Identity.GetUserId(),
                     new UserLoginInfo(model.LoginProvider, model.ProviderKey));
             }
 
             if (!result.Succeeded)
             {
-                return GetErrorResult(result);
+                return this.GetErrorResult(result);
             }
 
-            return Ok();
+            return this.Ok();
         }
 
         // GET api/Account/ExternalLogin
@@ -229,52 +228,52 @@ namespace VehicleRouting.Controllers
         {
             if (error != null)
             {
-                return Redirect(Url.Content("~/") + "#error=" + Uri.EscapeDataString(error));
+                return this.Redirect(this.Url.Content("~/") + "#error=" + Uri.EscapeDataString(error));
             }
 
-            if (!User.Identity.IsAuthenticated)
+            if (!this.User.Identity.IsAuthenticated)
             {
                 return new ChallengeResult(provider, this);
             }
 
-            ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
+            ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(this.User.Identity as ClaimsIdentity);
 
             if (externalLogin == null)
             {
-                return InternalServerError();
+                return this.InternalServerError();
             }
 
             if (externalLogin.LoginProvider != provider)
             {
-                Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+                this.Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
                 return new ChallengeResult(provider, this);
             }
 
-            ApplicationUser user = await UserManager.FindAsync(new UserLoginInfo(externalLogin.LoginProvider,
+            ApplicationUser user = await this.UserManager.FindAsync(new UserLoginInfo(externalLogin.LoginProvider,
                 externalLogin.ProviderKey));
 
             bool hasRegistered = user != null;
 
             if (hasRegistered)
             {
-                Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+                this.Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
                 
-                 ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager,
+                 ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(this.UserManager,
                     OAuthDefaults.AuthenticationType);
-                ClaimsIdentity cookieIdentity = await user.GenerateUserIdentityAsync(UserManager,
+                ClaimsIdentity cookieIdentity = await user.GenerateUserIdentityAsync(this.UserManager,
                     CookieAuthenticationDefaults.AuthenticationType);
 
                 AuthenticationProperties properties = ApplicationOAuthProvider.CreateProperties(user.UserName);
-                Authentication.SignIn(properties, oAuthIdentity, cookieIdentity);
+                this.Authentication.SignIn(properties, oAuthIdentity, cookieIdentity);
             }
             else
             {
                 IEnumerable<Claim> claims = externalLogin.GetClaims();
                 ClaimsIdentity identity = new ClaimsIdentity(claims, OAuthDefaults.AuthenticationType);
-                Authentication.SignIn(identity);
+                this.Authentication.SignIn(identity);
             }
 
-            return Ok();
+            return this.Ok();
         }
 
         // GET api/Account/ExternalLogins?returnUrl=%2F&generateState=true
@@ -282,7 +281,7 @@ namespace VehicleRouting.Controllers
         [Route("ExternalLogins")]
         public IEnumerable<ExternalLoginViewModel> GetExternalLogins(string returnUrl, bool generateState = false)
         {
-            IEnumerable<AuthenticationDescription> descriptions = Authentication.GetExternalAuthenticationTypes();
+            IEnumerable<AuthenticationDescription> descriptions = this.Authentication.GetExternalAuthenticationTypes();
             List<ExternalLoginViewModel> logins = new List<ExternalLoginViewModel>();
 
             string state;
@@ -302,12 +301,12 @@ namespace VehicleRouting.Controllers
                 ExternalLoginViewModel login = new ExternalLoginViewModel
                 {
                     Name = description.Caption,
-                    Url = Url.Route("ExternalLogin", new
+                    Url = this.Url.Route("ExternalLogin", new
                     {
                         provider = description.AuthenticationType,
                         response_type = "token",
                         client_id = Startup.PublicClientId,
-                        redirect_uri = new Uri(Request.RequestUri, returnUrl).AbsoluteUri,
+                        redirect_uri = new Uri(this.Request.RequestUri, returnUrl).AbsoluteUri,
                         state = state
                     }),
                     State = state
@@ -323,21 +322,21 @@ namespace VehicleRouting.Controllers
         [Route("Register")]
         public async Task<IHttpActionResult> Register(RegisterBindingModel model)
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return this.BadRequest(this.ModelState);
             }
 
             var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
 
-            IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+            IdentityResult result = await this.UserManager.CreateAsync(user, model.Password);
 
             if (!result.Succeeded)
             {
-                return GetErrorResult(result);
+                return this.GetErrorResult(result);
             }
 
-            return Ok();
+            return this.Ok();
         }
 
         // POST api/Account/RegisterExternal
@@ -346,39 +345,39 @@ namespace VehicleRouting.Controllers
         [Route("RegisterExternal")]
         public async Task<IHttpActionResult> RegisterExternal(RegisterExternalBindingModel model)
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return this.BadRequest(this.ModelState);
             }
 
-            var info = await Authentication.GetExternalLoginInfoAsync();
+            var info = await this.Authentication.GetExternalLoginInfoAsync();
             if (info == null)
             {
-                return InternalServerError();
+                return this.InternalServerError();
             }
 
             var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
 
-            IdentityResult result = await UserManager.CreateAsync(user);
+            IdentityResult result = await this.UserManager.CreateAsync(user);
             if (!result.Succeeded)
             {
-                return GetErrorResult(result);
+                return this.GetErrorResult(result);
             }
 
-            result = await UserManager.AddLoginAsync(user.Id, info.Login);
+            result = await this.UserManager.AddLoginAsync(user.Id, info.Login);
             if (!result.Succeeded)
             {
-                return GetErrorResult(result); 
+                return this.GetErrorResult(result); 
             }
-            return Ok();
+            return this.Ok();
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing && _userManager != null)
+            if (disposing && this._userManager != null)
             {
-                _userManager.Dispose();
-                _userManager = null;
+                this._userManager.Dispose();
+                this._userManager = null;
             }
 
             base.Dispose(disposing);
@@ -388,14 +387,14 @@ namespace VehicleRouting.Controllers
 
         private IAuthenticationManager Authentication
         {
-            get { return Request.GetOwinContext().Authentication; }
+            get { return this.Request.GetOwinContext().Authentication; }
         }
 
         private IHttpActionResult GetErrorResult(IdentityResult result)
         {
             if (result == null)
             {
-                return InternalServerError();
+                return this.InternalServerError();
             }
 
             if (!result.Succeeded)
@@ -404,17 +403,17 @@ namespace VehicleRouting.Controllers
                 {
                     foreach (string error in result.Errors)
                     {
-                        ModelState.AddModelError("", error);
+                        this.ModelState.AddModelError("", error);
                     }
                 }
 
-                if (ModelState.IsValid)
+                if (this.ModelState.IsValid)
                 {
                     // No ModelState errors are available to send, so just return an empty BadRequest.
-                    return BadRequest();
+                    return this.BadRequest();
                 }
 
-                return BadRequest(ModelState);
+                return this.BadRequest(this.ModelState);
             }
 
             return null;
@@ -429,11 +428,11 @@ namespace VehicleRouting.Controllers
             public IList<Claim> GetClaims()
             {
                 IList<Claim> claims = new List<Claim>();
-                claims.Add(new Claim(ClaimTypes.NameIdentifier, ProviderKey, null, LoginProvider));
+                claims.Add(new Claim(ClaimTypes.NameIdentifier, this.ProviderKey, null, this.LoginProvider));
 
-                if (UserName != null)
+                if (this.UserName != null)
                 {
-                    claims.Add(new Claim(ClaimTypes.Name, UserName, null, LoginProvider));
+                    claims.Add(new Claim(ClaimTypes.Name, this.UserName, null, this.LoginProvider));
                 }
 
                 return claims;
