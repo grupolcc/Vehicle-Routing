@@ -1,4 +1,7 @@
-﻿<style>
+﻿@using VehicleRouting.Models;
+@model IEnumerable<VehicleRouting.Models.PointOfDelivery>
+
+<style>
     .map {
         height: 500px;
         width: 100%;
@@ -10,11 +13,22 @@
         <p>Assign products to vehicles and choose the algorithm!</p>
     </div>
 </div>
+
 <div id="map" class="map">
     <script src="~/Scripts/OpenLayers/ol.js">
     </script>
     <link rel="stylesheet" href="~/Scripts/OpenLayers/ol.css" type="text/css">
     <script src="~/Scripts/OpenLayersExtensions/mapHandling.js" type="module">
     </script>
-    <script>initMap('listOfPoints');</script>
+    <script>
+        var pointsOfDelivery = [];
+
+            @foreach (var item in Model)
+            {
+                @:var coords = [@item.CoordX, @item.CoordY];
+                @:pointsOfDelivery.push(coords);
+            }
+       
+        initMap(pointsOfDelivery);
+    </script>
 </div>

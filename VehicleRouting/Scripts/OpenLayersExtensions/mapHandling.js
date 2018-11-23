@@ -1,7 +1,4 @@
-﻿function initMap(listOfPoints) { //TODO: handle a list of Points
-    var iconFeature = new ol.Feature({
-        geometry: new ol.geom.Point(ol.proj.fromLonLat([18.618, 54.373]))
-    });
+﻿function initMap(pointsOfDelivery) {
 
     var iconStyle = new ol.style.Style({
         image: new ol.style.Icon(({
@@ -13,16 +10,24 @@
         }))
     });
 
-    iconFeature.setStyle(iconStyle);
+    var iconFeaturesList = [];
+    pointsOfDelivery.forEach(function (localisation) {
+        var iconFeature = new ol.Feature({
+            geometry: new ol.geom.Point(ol.proj.fromLonLat(localisation))
+        });
+        
+        iconFeature.setStyle(iconStyle);
+        iconFeaturesList.push(iconFeature);
+    });
 
     var vectorSource = new ol.source.Vector({
-        features: [iconFeature]
+        features: iconFeaturesList
     });
 
     var vectorLayer = new ol.layer.Vector({
         source: vectorSource
     });
-
+    
     var map = new ol.Map({
         target: 'map',
         layers: [
@@ -39,7 +44,12 @@
         ]),
         view: new ol.View({
             center: ol.proj.fromLonLat([18.618, 54.373]),
-            zoom: 16
+            zoom: 14
         })
     });
+
 }
+
+function getVehicleSpawnPoints() {
+
+} 
