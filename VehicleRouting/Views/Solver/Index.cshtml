@@ -1,5 +1,5 @@
 ﻿@using VehicleRouting.Models;
-@model IEnumerable<VehicleRouting.Models.PointOfDelivery>
+@model ViewModel
 
 <style>
     .map {
@@ -21,14 +21,19 @@
     <script src="~/Scripts/OpenLayersExtensions/mapHandling.js" type="module">
     </script>
     <script>
+        var vehicles = [];
         var pointsOfDelivery = [];
 
-            @foreach (var item in Model)
-            {
-                @:var coords = [@item.CoordX, @item.CoordY];
-                @:pointsOfDelivery.push(coords);
-            }
+        @foreach (Vehicle vehicle in Model.Vehicles)
+        {
+            @:vehicles.push([@vehicle.SpawnPointX, @vehicle.SpawnPointY]);
+        }
+
+        @foreach (PointOfDelivery pointOfDelivery in Model.PointsOfDelivery)
+        {
+            @:pointsOfDelivery.push([@pointOfDelivery.CoordX, @pointOfDelivery.CoordY]);
+        }
        
-        initMap(pointsOfDelivery);
+        initMap(vehicles, pointsOfDelivery);
     </script>
 </div>

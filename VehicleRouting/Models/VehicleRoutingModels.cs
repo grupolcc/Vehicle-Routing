@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 
 namespace VehicleRouting.Models
@@ -40,5 +41,11 @@ namespace VehicleRouting.Models
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<PointOfDelivery> PointsOfDeliveries { get; set; }
+    }
+
+    public class ViewModel
+    {
+        public IEnumerable<PointOfDelivery> PointsOfDelivery { get; set; }
+        public IEnumerable<Vehicle> Vehicles { get; set; }
     }
 }

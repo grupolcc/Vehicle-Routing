@@ -1,24 +1,32 @@
-﻿function initMap(pointsOfDelivery) {
+﻿function initMap(vehicles, pointsOfDelivery) {
 
-    var iconStyle = new ol.style.Style({
+    var pointOfInterestIconStyle = new ol.style.Style({
         image: new ol.style.Icon(({
-            scale: 0.1,
-            anchor: [0.5, 1.0],
+            scale: 0.2,
+            anchor: [0.0, 1.0],
             anchorXUnits: 'fraction',
             anchorYUnits: 'fraction',
-            src: "/Content/Images/map-marker.png"
+            src: "/Content/Images/pod-map-marker.png"
+        }))
+    });
+
+    var vehicleIconStyle = new ol.style.Style({
+        image: new ol.style.Icon(({
+            scale: 0.2,
+            anchor: [0.0, 1.0],
+            anchorXUnits: 'fraction',
+            anchorYUnits: 'fraction',
+            src: "/Content/Images/vehicle-map-marker.png"
         }))
     });
 
     var iconFeaturesList = [];
-    pointsOfDelivery.forEach(function (localisation) {
-        var iconFeature = new ol.Feature({
-            geometry: new ol.geom.Point(ol.proj.fromLonLat(localisation))
-        });
-        
-        iconFeature.setStyle(iconStyle);
-        iconFeaturesList.push(iconFeature);
-    });
+    for (var i = 0; i < vehicles.length; i++) {
+        iconFeaturesList.push(createIconFeature(vehicles[i], vehicleIconStyle));
+    }
+    for (var i = 0; i < pointsOfDelivery.length; i++) {
+        iconFeaturesList.push(createIconFeature(pointsOfDelivery[i], pointOfInterestIconStyle));
+    }
 
     var vectorSource = new ol.source.Vector({
         features: iconFeaturesList
@@ -50,6 +58,10 @@
 
 }
 
-function getVehicleSpawnPoints() {
-
-} 
+function createIconFeature(localisation, iconStyle) {
+    var iconFeature = new ol.Feature({
+        geometry: new ol.geom.Point(ol.proj.fromLonLat(localisation))
+    });
+    iconFeature.setStyle(iconStyle);
+    return iconFeature;
+}

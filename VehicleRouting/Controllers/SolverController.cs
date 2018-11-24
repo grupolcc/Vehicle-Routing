@@ -12,7 +12,10 @@ namespace VehicleRouting.Controllers
         {
             this.ViewBag.Title = "Application";
 
-            return this.View(this.db.PointsOfDeliveries.ToList());
-        }        
+            ViewModel localisationsModel = new ViewModel();
+            localisationsModel.PointsOfDelivery = db.PointsOfDeliveries.ToList();
+            localisationsModel.Vehicles = db.Vehicles.ToList();
+            return this.View(localisationsModel);
+        }    
     }
 }
