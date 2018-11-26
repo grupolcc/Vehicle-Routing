@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 
 namespace VehicleRouting.Models
@@ -27,6 +28,8 @@ namespace VehicleRouting.Models
 
         [Range(1, int.MaxValue)]
         public int Weight { get; set; }
+
+        public virtual ICollection<ProductPack> ProductPacks { get; set; }
     }
 
     public class PointOfDelivery
@@ -41,6 +44,24 @@ namespace VehicleRouting.Models
         [Range(-90.00, 90.00)]
         [Display(Name = "Latitude")]
         public float CoordY { get; set; }
+
+        public virtual ICollection<ProductPack> ProductPacks { get; set; }
+    }
+
+    public class ProductPack
+    {
+        public int ID { get; set; }
+        public int Amount { get; set; }
+
+        public int ProductID { get; set; }
+
+        public int PointOfDeliveryID { get; set; }
+
+        [Required]
+        public virtual Product Product { get; set; }
+
+        [Required]
+        public virtual PointOfDelivery PointOfDelivery { get; set; }
     }
 
     public class VehicleDbContext : DbContext
@@ -48,5 +69,6 @@ namespace VehicleRouting.Models
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<PointOfDelivery> PointsOfDeliveries { get; set; }
+        public DbSet<ProductPack> ProductPacks { get; set; }
     }
 }
