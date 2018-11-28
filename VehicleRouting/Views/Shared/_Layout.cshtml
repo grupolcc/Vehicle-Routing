@@ -23,8 +23,7 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Solver", "Index", "Solver", new { area = "" }, null)</li>
                     <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Add data
-                        <span class="caret"></span></a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Add data<span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li>@Html.ActionLink("Add Vehicles", "Index", "Vehicles", new { area = "" }, null)</li>
                             <li>@Html.ActionLink("Add Products", "Index", "Products", new { area = "" }, null)</li>
@@ -32,6 +31,7 @@
                         </ul>
                     </li>
                 </ul>
+                @Html.Partial("_LoginPartial")
             </div>
         </div>
     </div>

@@ -1,13 +1,12 @@
 namespace VehicleRouting.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
     
     public partial class AddedPointsOfDeliveries : DbMigration
     {
         public override void Up()
         {
-            CreateTable(
+            this.CreateTable(
                 "dbo.PointOfDeliveries",
                 c => new
                     {
@@ -22,7 +21,7 @@ namespace VehicleRouting.Migrations
         
         public override void Down()
         {
-            DropTable("dbo.PointOfDeliveries");
+            this.DropTable("dbo.PointOfDeliveries");
         }
     }
 }
