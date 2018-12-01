@@ -11,9 +11,11 @@ namespace VehicleRouting.Models
         [Range(1, int.MaxValue)]
         public int Capacity { get; set; }
 
+        [Range(-180.00, 180.00)]
         [Display(Name = "Longitude of respawn")]
         public float SpawnPointX { get; set; }
 
+        [Range(-90.00, 90.00)]
         [Display(Name = "Latitude of respawn")]
         public float SpawnPointY { get; set; }
     }
@@ -32,9 +34,11 @@ namespace VehicleRouting.Models
         public int ID { get; set; }
         public string Name { get; set; }
 
+        [Range(-180.00, 180.00)]
         [Display(Name = "Longitude")]
         public float CoordX { get; set; }
 
+        [Range(-90.00, 90.00)]
         [Display(Name = "Latitude")]
         public float CoordY { get; set; }
     }
