@@ -5,6 +5,7 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
 using VehicleRouting.Models;
+using VehicleRouting.Models.AccountModels;
 
 namespace VehicleRouting
 {

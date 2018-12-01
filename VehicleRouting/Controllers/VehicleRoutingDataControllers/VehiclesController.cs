@@ -4,109 +4,109 @@ using System.Net;
 using System.Web.Mvc;
 using VehicleRouting.Models;
 
-namespace VehicleRouting.Controllers
+namespace VehicleRouting.Controllers.VehicleRoutingDataControllers
 {
-    public class PointsOfDeliveriesController : Controller
+    public class VehiclesController : Controller
     {
         private VehicleDbContext db = new VehicleDbContext();
 
-        // GET: PointsOfDeliveries
+        // GET: Vehicles
         public ActionResult Index()
         {
-            return this.View(this.db.PointsOfDeliveries.ToList());
+            return this.View(this.db.Vehicles.ToList());
         }
 
-        // GET: PointsOfDeliveries/Details/5
+        // GET: Vehicles/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PointOfDelivery pointOfDelivery = this.db.PointsOfDeliveries.Find(id);
-            if (pointOfDelivery == null)
+            Vehicle vehicle = this.db.Vehicles.Find(id);
+            if (vehicle == null)
             {
                 return this.HttpNotFound();
             }
-            return this.View(pointOfDelivery);
+            return this.View(vehicle);
         }
 
-        // GET: PointsOfDeliveries/Create
+        // GET: Vehicles/Create
         public ActionResult Create()
         {
             return this.View();
         }
 
-        // POST: PointsOfDeliveries/Create
+        // POST: Vehicles/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Name,CoordX,CoordY")] PointOfDelivery pointOfDelivery)
+        public ActionResult Create([Bind(Include = "ID,Name,Capacity,SpawnPointX,SpawnPointY")] Vehicle vehicle)
         {
             if (this.ModelState.IsValid)
             {
-                this.db.PointsOfDeliveries.Add(pointOfDelivery);
+                this.db.Vehicles.Add(vehicle);
                 this.db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
-            return this.View(pointOfDelivery);
+            return this.View(vehicle);
         }
 
-        // GET: PointsOfDeliveries/Edit/5
+        // GET: Vehicles/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PointOfDelivery pointOfDelivery = this.db.PointsOfDeliveries.Find(id);
-            if (pointOfDelivery == null)
+            Vehicle vehicle = this.db.Vehicles.Find(id);
+            if (vehicle == null)
             {
                 return this.HttpNotFound();
             }
-            return this.View(pointOfDelivery);
+            return this.View(vehicle);
         }
 
-        // POST: PointsOfDeliveries/Edit/5
+        // POST: Vehicles/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Name,CoordX,CoordY")] PointOfDelivery pointOfDelivery)
+        public ActionResult Edit([Bind(Include = "ID,Name,Capacity,SpawnPointX,SpawnPointY")] Vehicle vehicle)
         {
             if (this.ModelState.IsValid)
             {
-                this.db.Entry(pointOfDelivery).State = EntityState.Modified;
+                this.db.Entry(vehicle).State = EntityState.Modified;
                 this.db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
-            return this.View(pointOfDelivery);
+            return this.View(vehicle);
         }
 
-        // GET: PointsOfDeliveries/Delete/5
+        // GET: Vehicles/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PointOfDelivery pointOfDelivery = this.db.PointsOfDeliveries.Find(id);
-            if (pointOfDelivery == null)
+            Vehicle vehicle = this.db.Vehicles.Find(id);
+            if (vehicle == null)
             {
                 return this.HttpNotFound();
             }
-            return this.View(pointOfDelivery);
+            return this.View(vehicle);
         }
 
-        // POST: PointsOfDeliveries/Delete/5
+        // POST: Vehicles/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            PointOfDelivery pointOfDelivery = this.db.PointsOfDeliveries.Find(id);
-            this.db.PointsOfDeliveries.Remove(pointOfDelivery);
+            Vehicle vehicle = this.db.Vehicles.Find(id);
+            this.db.Vehicles.Remove(vehicle);
             this.db.SaveChanges();
             return this.RedirectToAction("Index");
         }

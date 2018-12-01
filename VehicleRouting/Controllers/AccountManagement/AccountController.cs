@@ -6,8 +6,9 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using VehicleRouting.Models;
+using VehicleRouting.Models.AccountModels;
 
-namespace VehicleRouting.Controllers
+namespace VehicleRouting.Controllers.AccountManagement
 {
     [Authorize]
     public class AccountController : Controller

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
 
-namespace VehicleRouting.Controllers
+namespace VehicleRouting.Controllers.VehicleRoutingDataControllers
 {
     [Authorize]
     public class ValuesController : ApiController

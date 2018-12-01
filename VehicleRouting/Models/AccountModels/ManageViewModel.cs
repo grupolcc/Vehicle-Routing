@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 
-namespace VehicleRouting.Models
+namespace VehicleRouting.Models.AccountModels
 {
     public class IndexViewModel
     {
