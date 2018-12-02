@@ -220,14 +220,14 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\PointsOfDeliveriesController.cs" />
-    <Compile Include="Controllers\ProductsController.cs" />
+    <Compile Include="Controllers\AccountManagement\ManageController.cs" />
+    <Compile Include="Controllers\VehicleRoutingDataControllers\PointsOfDeliveriesController.cs" />
+    <Compile Include="Controllers\VehicleRoutingDataControllers\ProductsController.cs" />
     <Compile Include="Controllers\SolverController.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AccountManagement\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
-    <Compile Include="Controllers\VehiclesController.cs" />
+    <Compile Include="Controllers\VehicleRoutingDataControllers\ValuesController.cs" />
+    <Compile Include="Controllers\VehicleRoutingDataControllers\VehiclesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -244,10 +244,10 @@
       <DependentUpon>201811181702324_Added-PointsOfDeliveries.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\AccountBindingModels.cs" />
-    <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\ManageViewModel.cs" />
+    <Compile Include="Models\AccountModels\AccountBindingModels.cs" />
+    <Compile Include="Models\AccountModels\AccountViewModels.cs" />
+    <Compile Include="Models\AccountModels\IdentityModels.cs" />
+    <Compile Include="Models\AccountModels\ManageViewModel.cs" />
     <Compile Include="Models\VehicleRoutingModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />

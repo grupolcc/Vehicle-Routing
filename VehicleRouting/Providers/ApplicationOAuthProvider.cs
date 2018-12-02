@@ -6,6 +6,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
 using VehicleRouting.Models;
+using VehicleRouting.Models.AccountModels;
 
 namespace VehicleRouting.Providers
 {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using VehicleRouting.Controllers;
+using VehicleRouting.Controllers.VehicleRoutingDataControllers;
 
 namespace VehicleRouting.Tests.Controllers
 {

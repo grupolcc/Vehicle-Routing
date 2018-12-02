@@ -4,7 +4,7 @@ using System.Net;
 using System.Web.Mvc;
 using VehicleRouting.Models;
 
-namespace VehicleRouting.Controllers
+namespace VehicleRouting.Controllers.VehicleRoutingDataControllers
 {
     public class ProductsController : Controller
     {

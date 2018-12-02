@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace VehicleRouting.Models
+namespace VehicleRouting.Models.AccountModels
 {
     public class ExternalLoginConfirmationViewModel
     {
