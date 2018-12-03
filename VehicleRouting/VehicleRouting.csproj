@@ -223,6 +223,7 @@
     <Compile Include="Controllers\AccountManagement\ManageController.cs" />
     <Compile Include="Controllers\VehicleRoutingDataControllers\PointsOfDeliveriesController.cs" />
     <Compile Include="Controllers\VehicleRoutingDataControllers\ProductsController.cs" />
+    <Compile Include="Controllers\VehicleRoutingDataControllers\ProductPacksController.cs" />
     <Compile Include="Controllers\SolverController.cs" />
     <Compile Include="Controllers\AccountManagement\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -243,11 +244,20 @@
     <Compile Include="Migrations\201811181702324_Added-PointsOfDeliveries.Designer.cs">
       <DependentUpon>201811181702324_Added-PointsOfDeliveries.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201811271847384_ProductPack.cs" />
+    <Compile Include="Migrations\201811271847384_ProductPack.Designer.cs">
+      <DependentUpon>201811271847384_ProductPack.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811280005226_foreign-keys.cs" />
+    <Compile Include="Migrations\201811280005226_foreign-keys.Designer.cs">
+      <DependentUpon>201811280005226_foreign-keys.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels\AccountBindingModels.cs" />
     <Compile Include="Models\AccountModels\AccountViewModels.cs" />
     <Compile Include="Models\AccountModels\IdentityModels.cs" />
     <Compile Include="Models\AccountModels\ManageViewModel.cs" />
+    <Compile Include="Models\VehicleRoutingViewModels.cs" />
     <Compile Include="Models\VehicleRoutingModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
@@ -313,6 +323,10 @@
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
     <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\ProductPacks\Create.cshtml" />
+    <Content Include="Views\ProductPacks\Delete.cshtml" />
+    <Content Include="Views\ProductPacks\Details.cshtml" />
+    <Content Include="Views\ProductPacks\Index.cshtml" />
     <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
@@ -352,6 +366,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201811181702324_Added-PointsOfDeliveries.resx">
       <DependentUpon>201811181702324_Added-PointsOfDeliveries.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811271847384_ProductPack.resx">
+      <DependentUpon>201811271847384_ProductPack.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811280005226_foreign-keys.resx">
+      <DependentUpon>201811280005226_foreign-keys.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
