@@ -71,10 +71,4 @@ namespace VehicleRouting.Models
         public DbSet<PointOfDelivery> PointsOfDeliveries { get; set; }
         public DbSet<ProductPack> ProductPacks { get; set; }
     }
-
-    public class ViewModel
-    {
-        public IEnumerable<PointOfDelivery> PointsOfDelivery { get; set; }
-        public IEnumerable<Vehicle> Vehicles { get; set; }
-    }
 }
