@@ -1,0 +1,53 @@
+﻿@model IEnumerable<VehicleRouting.Models.ProductPack>
+
+@{
+    ViewBag.Title = "Products requisition";
+}
+
+<h2>Products requisition</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Product)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Amount)
+        </th>
+        <th>
+            Total Weight
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PointOfDelivery)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Product.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Amount)
+        </td>
+        <th>
+            @{
+                int result = item.Amount * item.Product.Weight; 
+                <span>@result</span>
+            }
+        </th>
+        <td>
+            @Html.DisplayFor(modelItem => item.PointOfDelivery.Name)
+        </td>
+        <td>
+            @Html.ActionLink("Details", "Details", new {id = item.ID}) |
+            @Html.ActionLink("Delete", "Delete", new {id = item.ID})
+        </td>
+    </tr>
+}
+
+</table>

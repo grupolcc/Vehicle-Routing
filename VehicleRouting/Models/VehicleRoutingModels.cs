@@ -12,8 +12,12 @@ namespace VehicleRouting.Models
         [Range(1, int.MaxValue)]
         public int Capacity { get; set; }
 
-        // Spawn point
+        [Range(-180.00, 180.00)]
+        [Display(Name = "Longitude of respawn")]
         public float SpawnPointX { get; set; }
+
+        [Range(-90.00, 90.00)]
+        [Display(Name = "Latitude of respawn")]
         public float SpawnPointY { get; set; }
     }
 
@@ -24,6 +28,8 @@ namespace VehicleRouting.Models
 
         [Range(1, int.MaxValue)]
         public int Weight { get; set; }
+
+        public virtual ICollection<ProductPack> ProductPacks { get; set; }
     }
 
     public class PointOfDelivery
@@ -31,9 +37,31 @@ namespace VehicleRouting.Models
         public int ID { get; set; }
         public string Name { get; set; }
 
-        // Coordinates
+        [Range(-180.00, 180.00)]
+        [Display(Name = "Longitude")]
         public float CoordX { get; set; }
+
+        [Range(-90.00, 90.00)]
+        [Display(Name = "Latitude")]
         public float CoordY { get; set; }
+
+        public virtual ICollection<ProductPack> ProductPacks { get; set; }
+    }
+
+    public class ProductPack
+    {
+        public int ID { get; set; }
+        public int Amount { get; set; }
+
+        public int ProductID { get; set; }
+
+        public int PointOfDeliveryID { get; set; }
+
+        [Required]
+        public virtual Product Product { get; set; }
+
+        [Required]
+        public virtual PointOfDelivery PointOfDelivery { get; set; }
     }
 
     public class VehicleDbContext : DbContext
@@ -41,6 +69,7 @@ namespace VehicleRouting.Models
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<PointOfDelivery> PointsOfDeliveries { get; set; }
+        public DbSet<ProductPack> ProductPacks { get; set; }
     }
 
     public class ViewModel

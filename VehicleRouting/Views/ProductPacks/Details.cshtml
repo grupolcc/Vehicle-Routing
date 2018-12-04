@@ -1,0 +1,60 @@
+﻿@model VehicleRouting.Models.ProductPack
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Requisition details</h2>
+
+<div>
+    <h4>ProductPack</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Product)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Product.Name)
+        </dd>
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.Amount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Amount)
+        </dd>
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.Product.Weight)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Product.Weight)
+        </dd>
+        
+        <dt>
+            Total Weight
+        </dt>
+
+        <dd>
+            @{
+                int result = Model.Amount * Model.Product.Weight;
+                <span>@result</span>
+            }
+        </dd>
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.PointOfDelivery)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PointOfDelivery.Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>
