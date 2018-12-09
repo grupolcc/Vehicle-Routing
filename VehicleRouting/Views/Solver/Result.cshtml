@@ -1,0 +1,39 @@
+﻿@using VehicleRouting.Models;
+@model LocationsViewModel
+
+<style>
+    .map {
+        height: 500px;
+        width: 100%;
+    }
+</style>
+<div class="row">
+    <div>
+        <h2>Vehicle routing problem</h2>
+        <p>These are the results!</p>
+    </div>
+</div>
+
+<div id="map" class="map">
+    <script src="~/Scripts/OpenLayers/ol.js">
+    </script>
+    <link rel="stylesheet" href="~/Scripts/OpenLayers/ol.css" type="text/css">
+    <script src="~/Scripts/OpenLayersExtensions/mapHandling.js" type="module">
+    </script>
+    <script>
+        var vehicles = [];
+        var pointsOfDelivery = [];
+
+        @foreach (Vehicle vehicle in Model.Vehicles)
+        {
+            @:vehicles.push([@vehicle.SpawnPointX, @vehicle.SpawnPointY]);
+        }
+
+        @foreach (PointOfDelivery pointOfDelivery in Model.PointsOfDelivery)
+        {
+            @:pointsOfDelivery.push([@pointOfDelivery.CoordX, @pointOfDelivery.CoordY]);
+        }
+
+        initMap(vehicles, pointsOfDelivery);
+    </script>
+</div>

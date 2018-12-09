@@ -51,8 +51,8 @@
             new ol.control.OverviewMap()
         ]),
         view: new ol.View({
-            center: ol.proj.fromLonLat([18.618, 54.373]),
-            zoom: 14
+            center: ol.proj.fromLonLat([-73.982, 40.748]),
+            zoom: 16
         })
     });
 

@@ -1,5 +1,5 @@
 ﻿@using VehicleRouting.Models;
-@model LocationsViewModel
+@model SolverViewModel
 
 <style>
     .map {
@@ -24,12 +24,12 @@
         var vehicles = [];
         var pointsOfDelivery = [];
 
-        @foreach (Vehicle vehicle in Model.Vehicles)
+        @foreach (Vehicle vehicle in Model.LocationsViewModel.Vehicles)
         {
             @:vehicles.push([@vehicle.SpawnPointX, @vehicle.SpawnPointY]);
         }
 
-        @foreach (PointOfDelivery pointOfDelivery in Model.PointsOfDelivery)
+        @foreach (PointOfDelivery pointOfDelivery in Model.LocationsViewModel.PointsOfDelivery)
         {
             @:pointsOfDelivery.push([@pointOfDelivery.CoordX, @pointOfDelivery.CoordY]);
         }
@@ -37,3 +37,84 @@
         initMap(vehicles, pointsOfDelivery);
     </script>
 </div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <table>
+        <tr>
+            <th>
+                <div class="col-md-10">
+                    Product
+                </div>
+            </th>
+            <th>
+                <div class="col-md-10">
+                    Amount
+                </div>
+            </th>
+            <th>
+                <div class="col-md-10">
+                    Total Weight
+                </div>
+            </th>
+            <th>
+                <div class="col-md-10">
+                    Point of delivery
+                </div>
+            </th>
+            <th>
+                <div class="col-md-10">
+                    Choose vehicle
+                </div>
+            </th>
+        </tr>
+        @foreach (var item in Model.ProductPacks)
+        {
+            <tr>
+                <td>
+                    <div class="col-sm-10">
+                        @Html.DisplayFor(modelItem => item.Product.Name)
+                    </div>
+                </td>
+                <td>
+                    <div class="col-md-10">
+                        @Html.DisplayFor(modelItem => item.Amount)
+                    </div>
+                </td>
+                <td>
+                    <div class="col-md-10">
+                        @{
+                            int result = item.Amount * item.Product.Weight;
+                            <span>@result</span>
+                        }
+                    </div>
+                </td>
+                <td>
+                    <div class="col-md-10">
+                        @Html.DisplayFor(modelItem => item.PointOfDelivery.Name)
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.VehiclesIDs, (IEnumerable<SelectListItem>)ViewBag.Vehicles)
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            @Html.HiddenFor(model => model.ProductPacks, new {@Value = Model.ProductPacks[Model.ProductPacks.FindIndex(v => v == item)].ID })
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        }
+    </table>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Run" class="btn btn-default" />
+        </div>
+    </div>
+}
