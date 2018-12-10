@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace VehicleRouting.Models
 {
@@ -26,5 +27,16 @@ namespace VehicleRouting.Models
     {
         public List<int> VehiclesIDs { get; set; }
         public List<int> ProductPacks { get; set; }
+    }
+
+    public class SolverResultViewModel
+    {
+        public SolverReturnViewModel SolverReturnViewModel { get; set; }
+        public LocationsViewModel LocationsViewModel { get; set; }
+
+        /// <summary>
+        ///     Dictionary of keys - vehicle ids, values - sorted list of points they have to reach
+        /// </summary>
+        public Dictionary<int, List<ValueTuple<float, float>>> AlgorithmResult { get; set; }
     }
 }

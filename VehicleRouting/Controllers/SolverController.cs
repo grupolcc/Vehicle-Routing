@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
+using VehicleRouting.Logic;
 using VehicleRouting.Models;
 
 namespace VehicleRouting.Controllers
@@ -40,7 +41,16 @@ namespace VehicleRouting.Controllers
                 Vehicles = this.db.Vehicles.ToList()
             };
 
-            return this.View("Result", locationsModel);
+            var algorithm = new VehicleRoutingAlgorithm(solverReturnViewModel);
+
+            SolverResultViewModel solverResultViewModel = new SolverResultViewModel
+            {
+                LocationsViewModel = locationsModel,
+                SolverReturnViewModel = solverReturnViewModel,
+                AlgorithmResult = algorithm.GetRoutes()
+            };
+
+            return this.View("Result", solverResultViewModel);
         }
     }
 }

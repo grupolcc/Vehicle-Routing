@@ -1,5 +1,5 @@
 ﻿@using VehicleRouting.Models;
-@model LocationsViewModel
+@model SolverResultViewModel
 
 <style>
     .map {
@@ -24,12 +24,12 @@
         var vehicles = [];
         var pointsOfDelivery = [];
 
-        @foreach (Vehicle vehicle in Model.Vehicles)
+        @foreach (Vehicle vehicle in Model.LocationsViewModel.Vehicles)
         {
             @:vehicles.push([@vehicle.SpawnPointX, @vehicle.SpawnPointY]);
         }
 
-        @foreach (PointOfDelivery pointOfDelivery in Model.PointsOfDelivery)
+        @foreach (PointOfDelivery pointOfDelivery in Model.LocationsViewModel.PointsOfDelivery)
         {
             @:pointsOfDelivery.push([@pointOfDelivery.CoordX, @pointOfDelivery.CoordY]);
         }
