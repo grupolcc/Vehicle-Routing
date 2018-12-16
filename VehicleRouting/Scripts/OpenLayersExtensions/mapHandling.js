@@ -16,7 +16,7 @@
             anchor: [0.0, 1.0],
             anchorXUnits: 'fraction',
             anchorYUnits: 'fraction',
-            src: "/Content/Images/vehicle-map-marker.png"
+            src: "/Content/Images/Car1.png"
         }))
     });
 
@@ -56,6 +56,8 @@
         })
     });
 
+    return map;
+
 }
 
 function createIconFeature(localisation, iconStyle) {
@@ -64,4 +66,34 @@ function createIconFeature(localisation, iconStyle) {
     });
     iconFeature.setStyle(iconStyle);
     return iconFeature;
+}
+
+function showResults(vehicles, pointsOfDelivery, results) {
+    var map = initMap(vehicles, pointsOfDelivery);
+    for (var i = 0; i < results.length; i++) {
+        map.addLayer(getLineLayer(results[i]));
+    }
+}
+
+function getLineLayer(points) {
+    for (var i = 0; i < points.length; i++) {
+        points[i] = ol.proj.transform(points[i], 'EPSG:4326', 'EPSG:3857');
+    }
+
+    var featureLine = new ol.Feature({
+        geometry: new ol.geom.LineString(points)
+    });
+
+    var vectorLine = new ol.source.Vector({});
+    vectorLine.addFeature(featureLine);
+
+    var vectorLineLayer = new ol.layer.Vector({
+        source: vectorLine,
+        style: new ol.style.Style({
+            fill: new ol.style.Fill({ color: '#' + (Math.random() * 0xFFFFFF << 0).toString(16), weight: 6 }),
+            stroke: new ol.style.Stroke({ color: '#' + (Math.random() * 0xFFFFFF << 0).toString(16), width: 4 })
+        })
+    });
+
+    return vectorLineLayer;
 }
