@@ -71,11 +71,44 @@ function createIconFeature(localisation, iconStyle) {
 function showResults(vehicles, pointsOfDelivery, results) {
     var map = initMap(vehicles, pointsOfDelivery);
     for (var i = 0; i < results.length; i++) {
-        map.addLayer(getLineLayer(results[i]));
+        var randomColor = '#' + (Math.random() * 0xFFFFFF << 0).toString(16);
+        var points = getIntermediatePoints(results[i]);
+        var lineLayer = getLineLayer(points, randomColor);
+        map.addLayer(lineLayer);
     }
 }
 
-function getLineLayer(points) {
+function getPointsBetweenTwoPoints(pointA, pointB) {
+    var pts = [];
+
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", "https://router.project-osrm.org/route/v1/driving/" + pointA[0] + ',' + pointA[1] + ';' + pointB[0] + ',' + pointB[1] + "?steps=true&geometries=polyline&overview=false", false);
+    xmlHttp.send(null);
+    var jsonResponse = JSON.parse(xmlHttp.responseText);
+
+    var points = jsonResponse.routes[0].legs[0].steps;
+
+    for (var i = 0; i < points.length; i++) {
+        for (var j = 0; j < points[i].intersections.length; j++) {
+            pts.push(points[i].intersections[j].location);
+        }
+    }
+
+    return pts;
+}
+
+function getIntermediatePoints(points) {
+    var pts = [];
+    for (var i = 0; i < points.length; i++) {
+        pts.push(points[i]);
+        if (i + 1 < points.length) {          
+            pts.push.apply(pts, getPointsBetweenTwoPoints(points[i], points[i + 1]));
+        } 
+    }
+    return pts;
+}
+
+function getLineLayer(points, col) {
     for (var i = 0; i < points.length; i++) {
         points[i] = ol.proj.transform(points[i], 'EPSG:4326', 'EPSG:3857');
     }
@@ -90,8 +123,8 @@ function getLineLayer(points) {
     var vectorLineLayer = new ol.layer.Vector({
         source: vectorLine,
         style: new ol.style.Style({
-            fill: new ol.style.Fill({ color: '#' + (Math.random() * 0xFFFFFF << 0).toString(16), weight: 6 }),
-            stroke: new ol.style.Stroke({ color: '#' + (Math.random() * 0xFFFFFF << 0).toString(16), width: 4 })
+            fill: new ol.style.Fill({ color: col, weight: 6 }),
+            stroke: new ol.style.Stroke({ color: col, width: 4 })
         })
     });
 
