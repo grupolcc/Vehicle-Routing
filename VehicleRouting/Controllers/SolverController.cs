@@ -9,6 +9,7 @@ namespace VehicleRouting.Controllers
     {
         private readonly VehicleDbContext db = new VehicleDbContext();
 
+        [AllowAnonymous]
         public ActionResult Index()
         {
             LocationsViewModel locationsModel = new LocationsViewModel
