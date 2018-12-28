@@ -7,6 +7,7 @@ namespace VehicleRouting.Controllers
     public class SolverController : Controller
     {
         private readonly VehicleDbContext db = new VehicleDbContext();
+
         [AllowAnonymous]
         public ActionResult Index()
         {
