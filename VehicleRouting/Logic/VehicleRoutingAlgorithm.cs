@@ -114,6 +114,7 @@ namespace VehicleRouting.Logic
                 };
             process.StartInfo = startInfo;
             process.Start();
+            process.WaitForExit();
         }
 
         private List<ValueTuple<float, float>> ParseOutputFile(int vehicleID)
