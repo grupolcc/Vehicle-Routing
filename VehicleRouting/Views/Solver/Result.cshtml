@@ -23,47 +23,57 @@
     <script>
         var vehicles = [];
         var pointsOfDelivery = [];
-        var results = [];
-        @{
-            var index = 0;
-        }
+        var results = {};
 
         @foreach (Vehicle vehicle in Model.LocationsViewModel.Vehicles)
         {
             @:vehicles.push([@vehicle.SpawnPointX, @vehicle.SpawnPointY]);
-                }
+        }
 
         @foreach (PointOfDelivery pointOfDelivery in Model.LocationsViewModel.PointsOfDelivery)
         {
             @:pointsOfDelivery.push([@pointOfDelivery.CoordX, @pointOfDelivery.CoordY]);
-                }
+        }
 
-        @foreach (List<ValueTuple<float, float>> algorithmResultValue in Model.AlgorithmResult.Values)
+        @foreach (int vehicleID in Model.AlgorithmResult.Keys)
         {
-            @:results[@index] = [];
-            foreach (ValueTuple<float, float> value in algorithmResultValue)
+            @:var list = [];
+
+            foreach (ValueTuple<float, float> value in Model.AlgorithmResult[vehicleID])
             {
-                 @:results[@index].push([@value.Item1, @value.Item2]);
+                 @:list.push([@value.Item1, @value.Item2]);
             }
-            index = index + 1;
+            @:results[@vehicleID] = list;
         }
 
         showResults(vehicles, pointsOfDelivery, results);
     </script>
 </div>
 <div id="details">
+    <p>Click on one of the following boxes in order to select the route/routes you want to see.</p>
+    <div id="getAll" onclick="getAllLayers()" class="panel panel-default">
+        <p>GET ALL LAYERS</p>
+    </div>
     @foreach (int vehicleID in Model.AlgorithmResult.Keys)
     {
-        <div>
-            @(Model.LocationsViewModel.Vehicles.First(v=>v.ID == vehicleID).Name) 
+        <div id="@("vehicle" + vehicleID)" onclick="getSeperateLayer(@vehicleID)" class="panel panel-default">
+            @(Model.LocationsViewModel.Vehicles.First(v => v.ID == vehicleID).Name)
             <br/>
-            @foreach(ValueTuple<float, float> tuple in Model.AlgorithmResult[vehicleID])
+            @{
+                int i;
+            }
+            @for (i = 0; i < Model.AlgorithmResult[vehicleID].Count - 1; i++)
             {
+                var tuple = Model.AlgorithmResult[vehicleID][i];
                 @(tuple.Item1)
                 @Html.Raw(", ")
                 @(tuple.Item2)
                 @Html.Raw(" => ")
             }
+            @{
+                var lastTuple = Model.AlgorithmResult[vehicleID][i];
+            }
+            @lastTuple.Item1, @lastTuple.Item2
             <br/>
         </div>
     }

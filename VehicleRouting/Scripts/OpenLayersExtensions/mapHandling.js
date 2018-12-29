@@ -69,13 +69,35 @@ function createIconFeature(localisation, iconStyle) {
 }
 
 function showResults(vehicles, pointsOfDelivery, results) {
-    var map = initMap(vehicles, pointsOfDelivery);
-    for (var i = 0; i < results.length; i++) {
-        var randomColor = '#' + (Math.random() * 0xFFFFFF << 0).toString(16);
-        var points = getIntermediatePoints(results[i]);
-        var lineLayer = getLineLayer(points, randomColor);
-        map.addLayer(lineLayer);
+    map = initMap(vehicles, pointsOfDelivery);
+    layers = {};
+    for (var key in results) {
+        if (results.hasOwnProperty(key)) {
+            var randomColor = '#' + (Math.random() * 0xFFFFFF << 0).toString(16);
+            var points = getIntermediatePoints(results[key]);
+            var lineLayer = getLineLayer(points, randomColor);
+            map.addLayer(lineLayer);
+            layers[key] = lineLayer;
+        }
     }
+}
+
+function getAllLayers() {
+    for (var key in layers) {
+        if (layers.hasOwnProperty(key)) {
+            map.removeLayer(layers[key]);
+            map.addLayer(layers[key]);
+        }
+    }
+}
+
+function getSeperateLayer(vehicleID) {
+    for (var key in layers) {
+        if (layers.hasOwnProperty(key)) {
+            map.removeLayer(layers[key]);
+        }
+    }
+    map.addLayer(layers[vehicleID]);
 }
 
 function getPointsBetweenTwoPoints(pointA, pointB) {
