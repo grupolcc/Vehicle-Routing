@@ -15,7 +15,7 @@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            @Html.LabelFor(model => model.ProductID, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.Label("Product", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownListFor(model => model.ProductID, (IEnumerable<SelectListItem>)ViewBag.Products)
             </div>
@@ -30,7 +30,7 @@
         </div>
         
         <div class="form-group">
-            @Html.LabelFor(model => model.PointOfDeliveryID, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.Label("Point of delivery", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownListFor(model => model.PointOfDeliveryID, (IEnumerable<SelectListItem>)ViewBag.PointsOfDelivery)
             </div>

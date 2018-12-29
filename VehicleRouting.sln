@@ -7,6 +7,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleRouting", "VehicleRo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleRouting.Tests", "VehicleRouting.Tests\VehicleRouting.Tests.csproj", "{576DFE8A-1299-4107-B304-CAB7DCDAB163}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VehicleRoutingAlgorithms", "VehicleRoutingAlgorithms", "{5DB50D0F-3B67-4E91-8677-AB09EFF2EB63}"
+	ProjectSection(SolutionItems) = preProject
+		VehicleRoutingAlgorithms\distances.py = VehicleRoutingAlgorithms\distances.py
+		VehicleRoutingAlgorithms\exampleInput.txt = VehicleRoutingAlgorithms\exampleInput.txt
+		VehicleRoutingAlgorithms\exampleOutput.txt = VehicleRoutingAlgorithms\exampleOutput.txt
+		VehicleRoutingAlgorithms\main.py = VehicleRoutingAlgorithms\main.py
+		VehicleRoutingAlgorithms\solver.py = VehicleRoutingAlgorithms\solver.py
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

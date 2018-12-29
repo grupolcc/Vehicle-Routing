@@ -232,6 +232,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Logic\VehicleRoutingAlgorithm.cs" />
     <Compile Include="Migrations\201811181509339_InitialCreate.cs" />
     <Compile Include="Migrations\201811181509339_InitialCreate.Designer.cs">
       <DependentUpon>201811181509339_InitialCreate.cs</DependentUpon>
@@ -267,6 +268,11 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\Car1.png" />
+    <Content Include="Content\Images\Car2.png" />
+    <Content Include="Content\Images\Car3.png" />
+    <Content Include="Content\Images\Car4.png" />
+    <Content Include="Content\Images\Car5.png" />
     <Content Include="Content\Images\pod-map-marker.png" />
     <Content Include="Content\Images\vehicle-map-marker.png" />
     <Content Include="favicon.ico" />
@@ -350,6 +356,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Solver\Result.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -413,6 +420,10 @@
     <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
   </Target>
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /Y "$(SolutionDir)VehicleRoutingAlgorithms\*" "$(ProjectDir)bin"</PostBuildEvent>
+    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

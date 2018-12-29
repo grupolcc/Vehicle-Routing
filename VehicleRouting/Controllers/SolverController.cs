@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
+using VehicleRouting.Logic;
 using VehicleRouting.Models;
 
 namespace VehicleRouting.Controllers
@@ -11,14 +12,46 @@ namespace VehicleRouting.Controllers
         [AllowAnonymous]
         public ActionResult Index()
         {
-            this.ViewBag.Title = "Application";
-
             LocationsViewModel locationsModel = new LocationsViewModel
             {
                 PointsOfDelivery = this.db.PointsOfDeliveries.ToList(),
                 Vehicles = this.db.Vehicles.ToList()
             };
-            return this.View(locationsModel);
-        }    
+
+            SolverViewModel solverViewModel = new SolverViewModel
+            {
+                LocationsViewModel = locationsModel,
+                ProductPacks = this.db.ProductPacks.ToList()
+            };
+
+            this.ViewBag.Vehicles =
+                this.db.Vehicles.Select(v => new SelectListItem { Text = v.Name, Value = v.ID.ToString() }).ToList();
+
+            return this.View(solverViewModel);
+        }
+
+
+        // POST: Solver/Index
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
+        public ActionResult Index(SolverReturnViewModel solverReturnViewModel)
+        {
+            LocationsViewModel locationsModel = new LocationsViewModel
+            {
+                PointsOfDelivery = this.db.PointsOfDeliveries.ToList(),
+                Vehicles = this.db.Vehicles.ToList()
+            };
+
+            var algorithm = new VehicleRoutingAlgorithm(solverReturnViewModel);
+
+            SolverResultViewModel solverResultViewModel = new SolverResultViewModel
+            {
+                LocationsViewModel = locationsModel,
+                AlgorithmResult = algorithm.GetRoutes()
+            };
+
+            return this.View("Result", solverResultViewModel);
+        }
     }
 }
