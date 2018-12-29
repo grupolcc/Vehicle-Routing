@@ -1,9 +1,12 @@
 from __future__ import print_function
 from solver import *
 import sys
-
+import timeit
 
 def findRouting(coords):
+
+    start = timeit.default_timer()
+
     # Create Routing Model
     routing = pywrapcp.RoutingModel(len(coords), 1, 0)
 
@@ -20,8 +23,10 @@ def findRouting(coords):
     assignment = routing.SolveWithParameters(search_parameters)
     if assignment:
         solution, overallDistance = getSolution(routing, assignment)
-        printSolutionOnConsole(solution, overallDistance)
-        saveToOutputFile(vehicleID, coords, solution, overallDistance)
+        stop = timeit.default_timer()
+        t = stop - start
+        printSolutionOnConsole(solution, overallDistance, t)
+        saveToOutputFile(vehicleID, coords, solution, overallDistance, t)
 
 
 if __name__ == '__main__':

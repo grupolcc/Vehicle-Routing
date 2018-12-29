@@ -88,7 +88,7 @@ namespace VehicleRouting.Logic
         {
             this.CreateInputFile(vehicle, pointsOfDelivery);
             this.RunPythonAlgorithm(vehicle);
-            return this.ParseOutputFileAndDelete(vehicle);
+            return this.ParseOutputFile(vehicle);
         }
 
         private void CreateInputFile(int vehicleID, List<ValueTuple<float, float>> pointsOfDelivery)
@@ -116,7 +116,7 @@ namespace VehicleRouting.Logic
             process.Start();
         }
 
-        private List<ValueTuple<float, float>> ParseOutputFileAndDelete(int vehicleID)
+        private List<ValueTuple<float, float>> ParseOutputFile(int vehicleID)
         {
             var lines = File.ReadLines($"{this.projectBin}\\output{vehicleID}.txt");
 

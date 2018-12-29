@@ -34,6 +34,7 @@ namespace VehicleRouting.Controllers
         // POST: Solver/Index
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public ActionResult Index(SolverReturnViewModel solverReturnViewModel)
         {
             LocationsViewModel locationsModel = new LocationsViewModel
@@ -47,7 +48,6 @@ namespace VehicleRouting.Controllers
             SolverResultViewModel solverResultViewModel = new SolverResultViewModel
             {
                 LocationsViewModel = locationsModel,
-                SolverReturnViewModel = solverReturnViewModel,
                 AlgorithmResult = algorithm.GetRoutes()
             };
 

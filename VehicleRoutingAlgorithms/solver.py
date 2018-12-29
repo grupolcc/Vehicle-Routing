@@ -36,20 +36,21 @@ def getSolution(routing, assignment):
     return solution, distance
 
 
-def printSolutionOnConsole(solution, distance):
+def printSolutionOnConsole(solution, distance, t):
     """Print route on console"""
     output = 'Route for vehicle'
-    for item in solution[1:len(solution)-1]:
+    for item in solution[0:len(solution)-1]:
         output += ' {} ->'.format(item)
-    output += ' {0}\nDistance of route: {1}m\n'.format(solution[len(solution) - 1], distance)
+    output += ' {0}\nDistance of route: {1}m\nTime: {2}\n'.format(solution[len(solution) - 1], distance, t)
     print(output)
 
 
-def saveToOutputFile(vehicleID, coords, solution, overallDistance):
+def saveToOutputFile(vehicleID, coords, solution, overallDistance, t):
     listOfStrings = []
     for sol in solution:
         listOfStrings.append(str(coords[sol]).replace('(', '').replace(')', '').replace(' ', '')+'\n')
-    listOfStrings.append(str(overallDistance))
+    listOfStrings.append(str(overallDistance) + '\n')
+    listOfStrings.append(str(t))
 
     with open('output' + str(vehicleID) + '.txt', 'w') as file:
         file.writelines(listOfStrings)

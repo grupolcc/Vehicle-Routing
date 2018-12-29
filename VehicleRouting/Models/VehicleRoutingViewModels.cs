@@ -31,7 +31,6 @@ namespace VehicleRouting.Models
 
     public class SolverResultViewModel
     {
-        public SolverReturnViewModel SolverReturnViewModel { get; set; }
         public LocationsViewModel LocationsViewModel { get; set; }
 
         /// <summary>
