@@ -48,8 +48,10 @@ namespace VehicleRouting.Controllers
             SolverResultViewModel solverResultViewModel = new SolverResultViewModel
             {
                 LocationsViewModel = locationsModel,
-                AlgorithmResult = algorithm.GetRoutes()
+                AlgorithmResult = algorithm.GetRoutes(),
+                TimeAndDistance = algorithm.GetTimeAndDistance()
             };
+
 
             return this.View("Result", solverResultViewModel);
         }
