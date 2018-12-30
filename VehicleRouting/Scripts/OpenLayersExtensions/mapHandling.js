@@ -171,7 +171,7 @@ function getLineLayer(points, col) {
     var featureLine = new ol.Feature({
         geometry: new ol.geom.LineString(points)
     });
-        
+
     var vectorLine = new ol.source.Vector({});
     vectorLine.addFeature(featureLine);
 

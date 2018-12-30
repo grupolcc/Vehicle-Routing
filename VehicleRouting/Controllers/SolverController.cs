@@ -52,7 +52,6 @@ namespace VehicleRouting.Controllers
                 TimeAndDistance = algorithm.GetTimeAndDistance()
             };
 
-
             return this.View("Result", solverResultViewModel);
         }
     }
