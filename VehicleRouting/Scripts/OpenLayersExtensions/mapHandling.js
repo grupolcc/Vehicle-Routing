@@ -36,7 +36,7 @@
         source: vectorSource
     });
     
-    var map = new ol.Map({
+    map = new ol.Map({
         target: 'map',
         layers: [
             new ol.layer.Tile({
@@ -55,21 +55,18 @@
             zoom: 16
         })
     });
-
-    return map;
-
 }
 
-function createIconFeature(localisation, iconStyle) {
+function createIconFeature(localization, iconStyle) {
     var iconFeature = new ol.Feature({
-        geometry: new ol.geom.Point(ol.proj.fromLonLat(localisation))
+        geometry: new ol.geom.Point(ol.proj.fromLonLat(localization))
     });
     iconFeature.setStyle(iconStyle);
     return iconFeature;
 }
 
 function showResults(vehicles, pointsOfDelivery, results) {
-    map = initMap(vehicles, pointsOfDelivery);
+    initMap(vehicles, pointsOfDelivery);
     layers = {};
     for (var key in results) {
         if (results.hasOwnProperty(key)) {
@@ -91,7 +88,43 @@ function getAllLayers() {
     }
 }
 
-function getSeperateLayer(vehicleID) {
+function labelOnMap(label, coords) {
+    var style = new ol.style.Style({
+        text: new ol.style.Text({
+            text: label,
+            scale: 1.3,
+            fill: new ol.style.Fill({
+                color: '#000000'
+            }),
+            stroke: new ol.style.Stroke({
+                color: '#FFFF99',
+                width: 3.5
+            })
+        })
+    });
+
+    var movedCoords = [coords[0] - 0.0002, coords[1] + 0.0002];
+
+    var iconFeature = createIconFeature(movedCoords, style);
+
+    var source = new ol.source.Vector({});
+    source.addFeature(iconFeature);
+
+    var vector = new ol.layer.Vector({
+        source: source
+    });
+    map.addLayer(vector);
+}
+
+function labelVehicle(vehicleID, coords) {
+    labelOnMap('S' + vehicleID, coords);
+}
+
+function labelPoint(pointID, coords) {
+    labelOnMap('P' + pointID, coords);
+}
+
+function getSeparateLayer(vehicleID) {
     for (var key in layers) {
         if (layers.hasOwnProperty(key)) {
             map.removeLayer(layers[key]);
@@ -138,7 +171,7 @@ function getLineLayer(points, col) {
     var featureLine = new ol.Feature({
         geometry: new ol.geom.LineString(points)
     });
-
+        
     var vectorLine = new ol.source.Vector({});
     vectorLine.addFeature(featureLine);
 

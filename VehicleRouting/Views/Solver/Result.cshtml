@@ -47,6 +47,16 @@
         }
 
         showResults(vehicles, pointsOfDelivery, results);
+
+        @foreach (Vehicle vehicle in Model.LocationsViewModel.Vehicles)
+        {
+            @:labelVehicle(@vehicle.ID, [@vehicle.SpawnPointX, @vehicle.SpawnPointY]);
+        }
+
+        @foreach (PointOfDelivery pointOfDelivery in Model.LocationsViewModel.PointsOfDelivery)
+        {
+            @:labelPoint(@pointOfDelivery.ID, [@pointOfDelivery.CoordX, @pointOfDelivery.CoordY]);
+        }
     </script>
 </div>
 <div id="details">
@@ -56,24 +66,28 @@
     </div>
     @foreach (int vehicleID in Model.AlgorithmResult.Keys)
     {
-        <div id="@("vehicle" + vehicleID)" onclick="getSeperateLayer(@vehicleID)" class="panel panel-default">
+        <div id="@("vehicle" + vehicleID)" onclick="getSeparateLayer(@vehicleID)" class="panel panel-default">
             @(Model.LocationsViewModel.Vehicles.First(v => v.ID == vehicleID).Name)
             <br/>
+            
+            S@(vehicleID) =>
+
             @{
                 int i;
             }
-            @for (i = 0; i < Model.AlgorithmResult[vehicleID].Count - 1; i++)
+            @for (i = 1; i < Model.AlgorithmResult[vehicleID].Count - 1; i++)
             {
                 var tuple = Model.AlgorithmResult[vehicleID][i];
-                @(tuple.Item1)
-                @Html.Raw(", ")
-                @(tuple.Item2)
+
+                @Html.Raw("P")
+                @(Model.LocationsViewModel.PointsOfDelivery.ToList().Find(v => Math.Round(v.CoordX, 5) == Math.Round(tuple.Item1, 5) && Math.Round(v.CoordY, 5) == Math.Round(tuple.Item2, 5)).ID)
                 @Html.Raw(" => ")
             }
             @{
                 var lastTuple = Model.AlgorithmResult[vehicleID][i];
             }
-            @lastTuple.Item1, @lastTuple.Item2
+            @Html.Raw("P")
+            @(Model.LocationsViewModel.PointsOfDelivery.ToList().Find(v => Math.Round(v.CoordX, 5) == Math.Round(lastTuple.Item1, 5) && Math.Round(v.CoordY, 5) == Math.Round(lastTuple.Item2, 5)).ID)
             <br/>
             Time: @Model.TimeAndDistance[vehicleID].Item1 seconds
             <br />
