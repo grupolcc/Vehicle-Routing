@@ -1,7 +1,5 @@
 import requests
 import json
-from pprint import pprint
-
 
 # Set default distance calculator here
 def calculateDistance(position_1, position_2):

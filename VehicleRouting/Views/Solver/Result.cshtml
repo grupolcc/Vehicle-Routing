@@ -37,6 +37,9 @@
             {
                  @:list.push([@value.Item1, @value.Item2]);
             }
+
+            @:list.push([@Model.AlgorithmResult[vehicleID][0].Item1, @Model.AlgorithmResult[vehicleID][0].Item2]);
+
             @:results[@vehicleID] = list;
         }
 
@@ -63,13 +66,13 @@
         <div id="@("vehicle" + vehicleID)" onclick="getSeparateLayer(@vehicleID)" class="panel panel-default">
             @(Model.LocationsViewModel.Vehicles.First(v => v.ID == vehicleID).Name)
             <br/>
-            
+
             S@(vehicleID) =>
 
             @{
                 int i;
             }
-            @for (i = 1; i < Model.AlgorithmResult[vehicleID].Count - 1; i++)
+            @for (i = 1; i < Model.AlgorithmResult[vehicleID].Count; i++)
             {
                 var tuple = Model.AlgorithmResult[vehicleID][i];
 
@@ -77,14 +80,10 @@
                 @(Model.LocationsViewModel.PointsOfDelivery.ToList().Find(v => Math.Round(v.CoordX, 5) == Math.Round(tuple.Item1, 5) && Math.Round(v.CoordY, 5) == Math.Round(tuple.Item2, 5)).ID)
                 @Html.Raw(" => ")
             }
-            @{
-                var lastTuple = Model.AlgorithmResult[vehicleID][i];
-            }
-            @Html.Raw("P")
-            @(Model.LocationsViewModel.PointsOfDelivery.ToList().Find(v => Math.Round(v.CoordX, 5) == Math.Round(lastTuple.Item1, 5) && Math.Round(v.CoordY, 5) == Math.Round(lastTuple.Item2, 5)).ID)
+            S@(vehicleID)
             <br/>
             Time: @Model.TimeAndDistance[vehicleID].Item1 seconds
-            <br />
+            <br/>
             Distance: @Model.TimeAndDistance[vehicleID].Item2 meters
             <br/>
         </div>
