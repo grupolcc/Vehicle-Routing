@@ -2,7 +2,6 @@
 
 namespace VehicleRouting.Controllers
 {
-    [RequireHttps]
     public class HomeController : Controller
     {
 

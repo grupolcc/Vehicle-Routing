@@ -66,12 +66,10 @@
         <div id="@("vehicle" + vehicleID)" onclick="getSeparateLayer(@vehicleID)" class="panel panel-default">
             @(Model.LocationsViewModel.Vehicles.First(v => v.ID == vehicleID).Name)
             <br/>
-
-            S@(vehicleID) =>
-
             @{
                 int i;
             }
+            S@(vehicleID) =>
             @for (i = 1; i < Model.AlgorithmResult[vehicleID].Count; i++)
             {
                 var tuple = Model.AlgorithmResult[vehicleID][i];

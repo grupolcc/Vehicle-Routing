@@ -52,7 +52,7 @@
         ]),
         view: new ol.View({
             center: ol.proj.fromLonLat([-73.982, 40.748]),
-            zoom: 16
+            zoom: 15
         })
     });
 }
@@ -137,7 +137,8 @@ function getPointsBetweenTwoPoints(pointA, pointB) {
     var pts = [];
 
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("GET", "https://router.project-osrm.org/route/v1/driving/" + pointA[0] + ',' + pointA[1] + ';' + pointB[0] + ',' + pointB[1] + "?steps=true&geometries=polyline&overview=false", false);
+    var server = "http://94.245.106.244:5000"; //change to http://router.project-osrm.org for demo server (handles 5000 requests/min)
+    xmlHttp.open("GET", server + "/route/v1/driving/" + pointA[0] + ',' + pointA[1] + ';' + pointB[0] + ',' + pointB[1] + "?steps=true&geometries=polyline&overview=false", false);
     xmlHttp.send(null);
     var jsonResponse = JSON.parse(xmlHttp.responseText);
 
