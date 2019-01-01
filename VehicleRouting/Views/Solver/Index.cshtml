@@ -38,6 +38,15 @@
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
+    <div class="form-control">
+        <div class="col-md-10">
+            Choose metric:
+            <select id="MetricType" name="MetricType">
+                <option value="0">Actual distance</option>
+                <option value="1">Manhattan metric</option>
+            </select>
+        </div>
+    </div>
         <table>
             <tr>
                 <th>

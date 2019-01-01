@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleRouting", "VehicleRouting\VehicleRouting.csproj", "{2B1B56EC-DF7B-4863-9BCA-7CE6E6614078}"
 EndProject
@@ -9,10 +9,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleRouting.Tests", "Veh
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VehicleRoutingAlgorithms", "VehicleRoutingAlgorithms", "{5DB50D0F-3B67-4E91-8677-AB09EFF2EB63}"
 	ProjectSection(SolutionItems) = preProject
+		VehicleRoutingAlgorithms\constants.py = VehicleRoutingAlgorithms\constants.py
 		VehicleRoutingAlgorithms\distances.py = VehicleRoutingAlgorithms\distances.py
 		VehicleRoutingAlgorithms\exampleInput.txt = VehicleRoutingAlgorithms\exampleInput.txt
 		VehicleRoutingAlgorithms\exampleOutput.txt = VehicleRoutingAlgorithms\exampleOutput.txt
+		VehicleRoutingAlgorithms\inputParser.py = VehicleRoutingAlgorithms\inputParser.py
 		VehicleRoutingAlgorithms\main.py = VehicleRoutingAlgorithms\main.py
+		VehicleRoutingAlgorithms\osrmHandling.py = VehicleRoutingAlgorithms\osrmHandling.py
 		VehicleRoutingAlgorithms\solver.py = VehicleRoutingAlgorithms\solver.py
 	EndProjectSection
 EndProject
@@ -33,5 +36,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {36C95D76-9B02-4B63-89F0-8CAAEFACFB52}
 	EndGlobalSection
 EndGlobal

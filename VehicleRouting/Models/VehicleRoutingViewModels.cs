@@ -25,6 +25,7 @@ namespace VehicleRouting.Models
 
     public class SolverReturnViewModel
     {
+        public int MetricType { get; set; }
         public List<int> VehiclesIDs { get; set; }
         public List<int> ProductPacks { get; set; }
     }

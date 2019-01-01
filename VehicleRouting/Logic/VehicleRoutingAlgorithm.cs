@@ -121,7 +121,7 @@ namespace VehicleRouting.Logic
 
         private void RunPythonAlgorithm(int vehicleID)
         {
-            //TODO: implement some checks if the script was executed successfuly and created output files since for now we rely on the assumption that "THIS WORKS" :D
+            //TODO: implement some checks if the script was executed successfully and created output files since for now we rely on the assumption that "THIS WORKS" :D
 
             System.Diagnostics.Process process = new System.Diagnostics.Process();
             System.Diagnostics.ProcessStartInfo startInfo =
@@ -129,7 +129,7 @@ namespace VehicleRouting.Logic
                 {
                     WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden,
                     FileName = "cmd.exe",
-                    Arguments = $"/C cd /D \"{this.projectBin}\" & python main.py {vehicleID}"
+                    Arguments = $"/C cd /D \"{this.projectBin}\" & python main.py {vehicleID} {this.solverReturnViewModel.MetricType}"
                 };
             process.StartInfo = startInfo;
             process.Start();
