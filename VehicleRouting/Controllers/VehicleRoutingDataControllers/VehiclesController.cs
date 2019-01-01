@@ -1,5 +1,4 @@
-﻿using System;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -31,7 +30,7 @@ namespace VehicleRouting.Controllers.VehicleRoutingDataControllers
             }
             return this.View(vehicle);
         }
-        
+
         // GET: Vehicles/Create
         public ActionResult Create(string lon = "", string lat = "")
         {
