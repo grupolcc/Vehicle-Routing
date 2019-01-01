@@ -32,7 +32,7 @@ def getSolution(routing, assignment):
         solution.append(routing.IndexToNode(index))
         previous_index = index
         index = assignment.Value(routing.NextVar(index))
-        distance += routing.GetArcCostForVehicle(previous_index, index, 0) # TODO: calculate the actual distance not the latitude/longitude one
+        distance += routing.GetArcCostForVehicle(previous_index, index, 0)
     return solution, distance
 
 

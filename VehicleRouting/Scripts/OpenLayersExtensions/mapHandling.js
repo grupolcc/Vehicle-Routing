@@ -36,7 +36,7 @@
         source: vectorSource
     });
     
-    var map = new ol.Map({
+    map = new ol.Map({
         target: 'map',
         layers: [
             new ol.layer.Tile({
@@ -52,37 +52,93 @@
         ]),
         view: new ol.View({
             center: ol.proj.fromLonLat([-73.982, 40.748]),
-            zoom: 16
+            zoom: 15
         })
     });
-
-    return map;
-
 }
 
-function createIconFeature(localisation, iconStyle) {
+function createIconFeature(localization, iconStyle) {
     var iconFeature = new ol.Feature({
-        geometry: new ol.geom.Point(ol.proj.fromLonLat(localisation))
+        geometry: new ol.geom.Point(ol.proj.fromLonLat(localization))
     });
     iconFeature.setStyle(iconStyle);
     return iconFeature;
 }
 
 function showResults(vehicles, pointsOfDelivery, results) {
-    var map = initMap(vehicles, pointsOfDelivery);
-    for (var i = 0; i < results.length; i++) {
-        var randomColor = '#' + (Math.random() * 0xFFFFFF << 0).toString(16);
-        var points = getIntermediatePoints(results[i]);
-        var lineLayer = getLineLayer(points, randomColor);
-        map.addLayer(lineLayer);
+    initMap(vehicles, pointsOfDelivery);
+    layers = {};
+    for (var key in results) {
+        if (results.hasOwnProperty(key)) {
+            var randomColor = '#' + (Math.random() * 0xFFFFFF << 0).toString(16);
+            var points = getIntermediatePoints(results[key]);
+            var lineLayer = getLineLayer(points, randomColor);
+            map.addLayer(lineLayer);
+            layers[key] = lineLayer;
+        }
     }
+}
+
+function getAllLayers() {
+    for (var key in layers) {
+        if (layers.hasOwnProperty(key)) {
+            map.removeLayer(layers[key]);
+            map.addLayer(layers[key]);
+        }
+    }
+}
+
+function labelOnMap(label, coords) {
+    var style = new ol.style.Style({
+        text: new ol.style.Text({
+            text: label,
+            scale: 1.3,
+            fill: new ol.style.Fill({
+                color: '#000000'
+            }),
+            stroke: new ol.style.Stroke({
+                color: '#FFFF99',
+                width: 3.5
+            })
+        })
+    });
+
+    var movedCoords = [coords[0] - 0.0002, coords[1] + 0.0002];
+
+    var iconFeature = createIconFeature(movedCoords, style);
+
+    var source = new ol.source.Vector({});
+    source.addFeature(iconFeature);
+
+    var vector = new ol.layer.Vector({
+        source: source
+    });
+    map.addLayer(vector);
+}
+
+function labelVehicle(vehicleID, coords) {
+    labelOnMap('S' + vehicleID, coords);
+}
+
+function labelPoint(pointID, coords) {
+    labelOnMap('P' + pointID, coords);
+}
+
+function getSeparateLayer(vehicleID) {
+    for (var key in layers) {
+        if (layers.hasOwnProperty(key)) {
+            map.removeLayer(layers[key]);
+        }
+    }
+    map.addLayer(layers[vehicleID]);
 }
 
 function getPointsBetweenTwoPoints(pointA, pointB) {
     var pts = [];
 
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("GET", "https://router.project-osrm.org/route/v1/driving/" + pointA[0] + ',' + pointA[1] + ';' + pointB[0] + ',' + pointB[1] + "?steps=true&geometries=polyline&overview=false", false);
+    var server = "http://94.245.106.244:5000"; //change to http://router.project-osrm.org for demo server (handles 5000 requests/min)
+    xmlHttp.open("GET", server + "/route/v1/driving/" + pointA[0] + ',' + pointA[1] + ';' + pointB[0] + ',' + pointB[1] + "?steps=true&geometries=polyline&overview=false", false);
     xmlHttp.send(null);
     var jsonResponse = JSON.parse(xmlHttp.responseText);
 
