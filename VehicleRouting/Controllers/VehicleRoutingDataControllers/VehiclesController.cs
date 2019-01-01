@@ -32,9 +32,22 @@ namespace VehicleRouting.Controllers.VehicleRoutingDataControllers
         }
 
         // GET: Vehicles/Create
-        public ActionResult Create()
+        public ActionResult Create(string lon = "", string lat = "")
         {
-            return this.View();
+            try
+            {
+                var vehicle = new Vehicle
+                {
+                    SpawnPointX = float.Parse(lon),
+                    SpawnPointY = float.Parse(lat)
+                };
+
+                return this.View(vehicle);
+            }
+            catch
+            {
+                return this.View();
+            }
         }
 
         // POST: Vehicles/Create
