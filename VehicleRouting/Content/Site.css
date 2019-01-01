@@ -15,3 +15,16 @@ select,
 textarea {
     max-width: 280px;
 }
+
+#resultIndex table {
+    width: 100%;
+}
+
+#resultIndex tr {
+    border: 1px solid black;
+}
+
+#map {
+    height: 500px;
+    width: 100%;
+}

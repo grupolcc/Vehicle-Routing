@@ -14,6 +14,8 @@ namespace VehicleRouting.Logic
 
         private readonly string projectBin = $"{System.Web.HttpContext.Current.Server.MapPath("~")}bin";
 
+        private Dictionary<int, List<ValueTuple<float, float>>> inputData;
+
         public VehicleRoutingAlgorithm(SolverReturnViewModel solverReturnViewModel)
         {
             this.solverReturnViewModel = solverReturnViewModel;
@@ -27,11 +29,28 @@ namespace VehicleRouting.Logic
         {
             var dict = new Dictionary<int, List<ValueTuple<float, float>>>();
 
-            Dictionary<int, List<ValueTuple<float, float>>> inputData = this.CreateInputData();
+            this.inputData = this.CreateInputData();
 
-            foreach (int vehicle in inputData.Keys)
+            foreach (int vehicle in this.inputData.Keys)
             {
-                dict.Add(vehicle, this.RunAlgorithm(vehicle, inputData[vehicle]));
+                dict.Add(vehicle, this.RunAlgorithm(vehicle, this.inputData[vehicle]));
+            }
+
+            return dict;
+        }
+
+        /// <summary>
+        ///     Get a dictionary containing time of computing and distance for each vehicle after algorithm execution
+        /// </summary>
+        /// <returns> Dictionary containing vehicle ids as keys and time and distance as values. </returns>
+        public Dictionary<int, ValueTuple<float, float>> GetTimeAndDistance()
+        {
+            var dict = new Dictionary<int, ValueTuple<float, float>>();
+
+            foreach (var key in this.inputData.Keys)
+            {
+                var lines = File.ReadLines($"{this.projectBin}\\output{key}.txt").ToList();
+                dict.Add(key, new ValueTuple<float, float>(float.Parse(lines[lines.Count - 1]), float.Parse(lines[lines.Count - 2])));
             }
 
             return dict;
