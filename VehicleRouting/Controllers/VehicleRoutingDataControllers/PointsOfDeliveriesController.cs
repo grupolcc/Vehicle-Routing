@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -32,9 +33,22 @@ namespace VehicleRouting.Controllers.VehicleRoutingDataControllers
         }
 
         // GET: PointsOfDeliveries/Create
-        public ActionResult Create()
+        public ActionResult Create(string lon = "", string lat = "")
         {
-            return this.View();
+            try
+            {
+                var pointOfDelivery = new PointOfDelivery()
+                {
+                    CoordX = float.Parse(lon),
+                    CoordY = float.Parse(lat)
+                };
+
+                return this.View(pointOfDelivery);
+            }
+            catch
+            {
+                return this.View();
+            }
         }
 
         // POST: PointsOfDeliveries/Create

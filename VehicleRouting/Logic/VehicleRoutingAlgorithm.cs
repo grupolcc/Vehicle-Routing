@@ -110,7 +110,7 @@ namespace VehicleRouting.Logic
                 {
                     WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden,
                     FileName = "cmd.exe",
-                    Arguments = $"/C cd \"{this.projectBin}\" & python main.py {vehicleID}"
+                    Arguments = $"/C cd /D \"{this.projectBin}\" & python main.py {vehicleID}"
                 };
             process.StartInfo = startInfo;
             process.Start();

@@ -53,10 +53,11 @@ namespace VehicleRouting.Controllers.AccountManagement
         //
         // GET: /Account/Login
         [AllowAnonymous]
-        public ActionResult Login(string returnUrl)
+        public ActionResult Login(LoginViewModel model = null, string returnUrl = null)
         {
-            this.ViewBag.ReturnUrl = returnUrl;
-            return this.View();
+            if (!string.IsNullOrEmpty(returnUrl))
+                this.ViewBag.ReturnUrl = returnUrl;
+            return this.View(model);
         }
 
         //
@@ -64,7 +65,8 @@ namespace VehicleRouting.Controllers.AccountManagement
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        [ActionName("Login")]
+        public async Task<ActionResult> LoginPost(LoginViewModel model, string returnUrl)
         {
             if (!this.ModelState.IsValid)
             {
@@ -77,7 +79,9 @@ namespace VehicleRouting.Controllers.AccountManagement
             switch (result)
             {
                 case SignInStatus.Success:
-                    return this.RedirectToLocal(returnUrl);
+                    if (!string.IsNullOrEmpty(returnUrl) && returnUrl != "/Account/Login")
+                        return this.RedirectToLocal(returnUrl);
+                    return this.RedirectToAction("Index", "Home");
                 case SignInStatus.LockedOut:
                     return this.View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -85,7 +89,7 @@ namespace VehicleRouting.Controllers.AccountManagement
                 case SignInStatus.Failure:
                 default:
                     this.ModelState.AddModelError("", "Invalid login attempt.");
-                    return this.View(model);
+                    return this.Login(model, returnUrl);
             }
         }
 
