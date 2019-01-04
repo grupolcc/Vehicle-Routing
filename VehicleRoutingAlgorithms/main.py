@@ -1,5 +1,8 @@
 from __future__ import print_function
 from solver import *
+from distances import *
+from inputParser import *
+from constants import *
 import sys
 import timeit
 
@@ -11,7 +14,7 @@ def findRouting(coords):
     routing = pywrapcp.RoutingModel(len(coords), 1, 0)
 
     # Define weight of each edge
-    distance_callback = createDistanceCallback(coords)
+    distance_callback = createDistanceCallback(metricID, coords)
     routing.SetArcCostEvaluatorOfAllVehicles(distance_callback)
     addDistanceDimension(routing, distance_callback)
 
@@ -22,15 +25,13 @@ def findRouting(coords):
     # Solve the problem.
     assignment = routing.SolveWithParameters(search_parameters)
     if assignment:
-        solution, overallDistance = getSolution(routing, assignment)
-        stop = timeit.default_timer()
-        t = stop - start
+        solution, overallDistance, points = getSolution(coords, metricID, routing, assignment)
+        t = timeit.default_timer() - start
         printSolutionOnConsole(solution, overallDistance, t)
-        saveToOutputFile(vehicleID, coords, solution, overallDistance, t)
-
+        saveToOutputFile(vehicleID, points, overallDistance, t)
 
 if __name__ == '__main__':
-    vehicleID = int(sys.argv[1])
+    vehicleID, metricID = parseInput()
     with open('input' + str(vehicleID) + '.txt') as f:
         locations = [tuple(map(float, i.split(','))) for i in f]
 

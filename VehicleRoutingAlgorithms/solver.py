@@ -2,9 +2,9 @@ from __future__ import print_function
 from ortools.constraint_solver import pywrapcp
 from ortools.constraint_solver import routing_enums_pb2
 from distances import *
+from osrmHandling import *
 
-
-def createDistanceCallback(data):
+def createDistanceCallback(metricID, data):
     """Creates callback to return distance between points."""
     _distances = {}
 
@@ -15,7 +15,7 @@ def createDistanceCallback(data):
                 _distances[from_node][to_node] = 0
             else:
                 _distances[from_node][to_node] = (
-                    calculateDistance(data[from_node], data[to_node]))
+                    calculateDistance(metricID, data[from_node], data[to_node]))
 
     def distanceCallback(from_node, to_node):
         """Returns the distance between the two nodes"""
@@ -24,7 +24,7 @@ def createDistanceCallback(data):
     return distanceCallback
 
 
-def getSolution(routing, assignment):
+def getSolution(coords, metricID, routing, assignment):
     index = routing.Start(0)
     solution = []
     distance = 0
@@ -33,33 +33,37 @@ def getSolution(routing, assignment):
         previous_index = index
         index = assignment.Value(routing.NextVar(index))
         distance += routing.GetArcCostForVehicle(previous_index, index, 0)
-    return solution, distance
+    points = []
+    for sol in solution:
+        points.append([coords[sol][0], coords[sol][1]])
+    if metricID != OSRM_METRIC:
+        distance = getRoutingDistanceFromListOfPoints(points)
 
+    return solution, distance, points
 
 def printSolutionOnConsole(solution, distance, t):
-    """Print route on console"""
     output = 'Route for vehicle'
-    for item in solution[0:len(solution)-1]:
+    for item in solution[0:len(solution)]:
         output += ' {} ->'.format(item)
-    output += ' {0}\nDistance of route: {1}m\nTime: {2}\n'.format(solution[len(solution) - 1], distance, t)
+    output += ' {0}'.format(solution[0])
+    output += ' \nDistance of route: {0}m\nTime: {1}\n'.format(distance, t)
     print(output)
 
 
-def saveToOutputFile(vehicleID, coords, solution, overallDistance, t):
+def saveToOutputFile(vehicleID, points, overallDistance, t):
     listOfStrings = []
-    for sol in solution:
-        listOfStrings.append(str(coords[sol]).replace('(', '').replace(')', '').replace(' ', '')+'\n')
+    for p in points:
+        listOfStrings.append(str(p).replace('[', '').replace(']', '').replace(' ', '')+'\n')
     listOfStrings.append(str(overallDistance) + '\n')
     listOfStrings.append(str(t))
 
     with open('output' + str(vehicleID) + '.txt', 'w') as file:
         file.writelines(listOfStrings)
 
-
 def addDistanceDimension(routing, distance_callback):
     """Add Global Span constraint"""
     distance = 'Distance'
-    maximum_distance = 25000  # Maximum distance per vehicle - 25 km.
+    maximum_distance = 1000000  # Maximum distance per vehicle - 1000 km.
     routing.AddDimension(
         distance_callback,
         0,  # null slack
