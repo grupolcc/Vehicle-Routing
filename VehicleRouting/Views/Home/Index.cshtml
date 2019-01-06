@@ -2,12 +2,42 @@
     <div>
         <h2>Vehicle routing problem</h2>
         <p>
-            This application tries to solve modified <a href="https://en.wikipedia.org/wiki/Vehicle_routing_problem">vehicle routing problem.</a>
-            <br/>
-            Definition of the problem:
-            <br/>
-            TODO
+            <br />
+            This application solves the modified <a href="https://en.wikipedia.org/wiki/Vehicle_routing_problem">vehicle routing problem.</a>
+            <br /><br />
+            <b>Description of the modified vehicle routing problem</b>
+            <br /><br />
+            The modification of the original vehicle routing problem is that it is simplified to a set of traveling salesman problems
+            for separate vehicles. It is the user who links packages with vehicles and implicitly chooses a set of destinations for each vehicle.
+            Another difference in relation to the original vehicle routing problem is that vehicles may have different starting locations.
+            <br /><br />
+            <b>What the user can set?</b>
+            <br /><br />
+            After logging in, the user can add, modify and delete vehicles, products, points of delivery and product packages.
+            The user also <b>links product packages with vehicles</b>.
+            <br />
+            Every vehicle has its maximum capacity and starting location, both set by the user. One can also set the weight of products.
+            Amounts and points of deliveries of product packages are also set by the user.
+            <br /><br />
+            <b>How the modified problem is solved?</b>
+            <br /><br />
+            A complete graph is being created with distances between nodes representing distances between vehicle and points of delivery.
+            This graph can be created in two different ways depending on user's choice:
+            <ul>
+                <li>using self hosted <a href="https://github.com/Project-OSRM/osrm-backend">OSRM server</a>,</li>
+                <li>using <a href="https://en.wikipedia.org/wiki/Taxicab_geometry">taxicab geometry</a> for measuring distances.</li>
+            </ul>
+            The OSRM method provides us with accurate distances between points, but it does complex calculations on the OSRM server which
+            may take a lot of time if we consider very big dataset.
+            On the other hand, the taxicab method utilizes less calculations, but it results in a less accurate distances between points.
+            <br />
+            After the graph is created we find the routes with the use of OR-TOOLS algorithms.
+            <br /><br />
+            <b>What do we receive as a result?</b>
+            <br /><br />
+            As a result of running the solver, for every vehicle one receives points of the route, execution time of the algorithm (time spent
+            on creating the graph included) and the total distance.
         </p>
-        <p>@Html.ActionLink("Try it out!", "Index", "Solver", new { area = "" }, null)</p>
+        <p><br/>@Html.ActionLink("Try it out!", "Index", "Solver", new { area = "" }, null)</p>
     </div>
 </div>
