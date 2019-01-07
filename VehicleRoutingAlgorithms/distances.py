@@ -17,7 +17,7 @@ def calculateDistance(metricID, position_1, position_2):
         sys.exit(0)
 
 def manhattanDistance(position_1, position_2):
-    return abs(position_1[0] - position_2[0]) + abs(position_1[1] - position_2[1])
+    return MANHATTAN_MULTIPLIER*(abs(position_1[0] - position_2[0]) + abs(position_1[1] - position_2[1]))
 
 def actualDistance(position_1, position_2):
     return getRoutingDistanceFromListOfPoints([position_1, position_2])

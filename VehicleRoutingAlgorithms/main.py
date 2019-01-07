@@ -3,6 +3,7 @@ from solver import *
 from distances import *
 from inputParser import *
 from constants import *
+from bruteForce import *
 import sys
 import timeit
 
@@ -34,5 +35,7 @@ if __name__ == '__main__':
     vehicleID, metricID = parseInput()
     with open('input' + str(vehicleID) + '.txt') as f:
         locations = [tuple(map(float, i.split(','))) for i in f]
-
-    findRouting(locations)
+    if metricID != BRUTE_FORCE:
+        findRouting(locations)
+    else:
+        bruteForce(locations)
