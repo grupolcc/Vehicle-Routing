@@ -22,20 +22,20 @@
         <script src="~/Scripts/validateVehicleWeight.js" type="text/javascript">
         </script>
         <script>
-        var vehicles = [];
-        var pointsOfDelivery = [];
+            var vehicles = [];
+            var pointsOfDelivery = [];
 
-        @foreach (Vehicle vehicle in Model.LocationsViewModel.Vehicles)
-        {
-            @:vehicles.push([@vehicle.SpawnPointX, @vehicle.SpawnPointY]);
-        }
+            @foreach (Vehicle vehicle in Model.LocationsViewModel.Vehicles)
+            {
+                @:vehicles.push([@vehicle.SpawnPointX, @vehicle.SpawnPointY]);
+            }
 
-        @foreach (PointOfDelivery pointOfDelivery in Model.LocationsViewModel.PointsOfDelivery)
-        {
-            @:pointsOfDelivery.push([@pointOfDelivery.CoordX, @pointOfDelivery.CoordY]);
-        }
+            @foreach (PointOfDelivery pointOfDelivery in Model.LocationsViewModel.PointsOfDelivery)
+            {
+                @:pointsOfDelivery.push([@pointOfDelivery.CoordX, @pointOfDelivery.CoordY]);
+            }
 
-        initMap(vehicles, pointsOfDelivery);
+            initMap(vehicles, pointsOfDelivery);
         </script>
         <script type="text/javascript">
             let vehiclesAndWeights = [];
