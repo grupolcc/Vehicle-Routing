@@ -67,9 +67,9 @@ printExceededWeightMessage = function (vehiclesAndWeights) {
             let exceededWeight = e.packWeight - e.capacity;
 
             exceededWeightMessage += e.vname;
-            exceededWeightMessage += ": vehicles capacity(";
+            exceededWeightMessage += ": vehicles capacity (";
             exceededWeightMessage += e.capacity;
-            exceededWeightMessage += ") is exceeded by: ";
+            exceededWeightMessage += " kg) is exceeded by: ";
             exceededWeightMessage += exceededWeight;
             exceededWeightMessage += " kg.\n\n"
         }
