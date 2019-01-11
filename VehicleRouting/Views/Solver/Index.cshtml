@@ -9,33 +9,48 @@
         </div>
     </div>
 
-<div id="map" class="map">
-    <script src="~/Scripts/OpenLayers/ol.js">
-    </script>
-    <script src="https://unpkg.com/ol-popup@4.0.0"></script>
-    <link rel="stylesheet" href="~/Scripts/OpenLayers/ol.css" type="text/css">
-    <link rel="stylesheet" href="https://unpkg.com/ol-popup@4.0.0/src/ol-popup.css" />
-    <script src="~/Scripts/OpenLayersExtensions/mapHandling.js" type="module">
-    </script>
-    <script>
-        var vehicles = [];
-        var pointsOfDelivery = [];
+    <div id="map" class="map">
+        <script src="~/Scripts/OpenLayers/ol.js">
+        </script>
+        <script src="https://unpkg.com/ol-popup@4.0.0"></script>
+        <link rel="stylesheet" href="~/Scripts/OpenLayers/ol.css" type="text/css">
+        <link rel="stylesheet" href="https://unpkg.com/ol-popup@4.0.0/src/ol-popup.css" />
+        <script src="~/Scripts/OpenLayersExtensions/mapHandling.js" type="module">
+        </script>
+        <script src="~/Scripts/jquery-1.10.2.min.js" type="text/javascript">
+        </script>
+        <script src="~/Scripts/validateVehicleWeight.js" type="text/javascript">
+        </script>
+        <script>
+            var vehicles = [];
+            var pointsOfDelivery = [];
 
-        @foreach (Vehicle vehicle in Model.LocationsViewModel.Vehicles)
-        {
-            @:vehicles.push([@vehicle.SpawnPointX, @vehicle.SpawnPointY]);
-        }
+            @foreach (Vehicle vehicle in Model.LocationsViewModel.Vehicles)
+            {
+                @:vehicles.push([@vehicle.SpawnPointX, @vehicle.SpawnPointY]);
+            }
 
-        @foreach (PointOfDelivery pointOfDelivery in Model.LocationsViewModel.PointsOfDelivery)
-        {
-            @:pointsOfDelivery.push([@pointOfDelivery.CoordX, @pointOfDelivery.CoordY]);
-        }
+            @foreach (PointOfDelivery pointOfDelivery in Model.LocationsViewModel.PointsOfDelivery)
+            {
+                @:pointsOfDelivery.push([@pointOfDelivery.CoordX, @pointOfDelivery.CoordY]);
+            }
 
-        initMap(vehicles, pointsOfDelivery);
+            initMap(vehicles, pointsOfDelivery);
+        </script>
+        <script type="text/javascript">
+            let vehiclesAndWeights = [];
+
+            @foreach (Vehicle vehicle in Model.LocationsViewModel.Vehicles)
+            {
+                @:vehiclesAndWeights.push({ id: @vehicle.ID, vname: "@vehicle.Name", capacity: @vehicle.Capacity, packWeight: 0 });
+            }
+
+            validateVehicleWeights(vehiclesAndWeights);
+
         </script>
     </div>
 
-    @using (Html.BeginForm())
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "postForm" }))
     {
         @Html.AntiForgeryToken()
         <div class="form-control">
@@ -77,7 +92,7 @@
             </tr>
             @foreach (var item in Model.ProductPacks)
             {
-                <tr>
+                <tr class="packsAndVehicles">
                     <td>
                         <div class="col-sm-10">
                             @Html.DisplayFor(modelItem => item.Product.Name)
@@ -88,11 +103,11 @@
                             @Html.DisplayFor(modelItem => item.Amount)
                         </div>
                     </td>
-                    <td>
+                    <td >
                         <div class="col-md-10">
                             @{
                                 int result = item.Amount * item.Product.Weight;
-                                <span>@result</span>
+                                <span class="pack-weight">@result</span">
                             }
                         </div>
                     </td>
