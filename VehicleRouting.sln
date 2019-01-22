@@ -14,6 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VehicleRoutingAlgorithms", 
 		VehicleRoutingAlgorithms\distances.py = VehicleRoutingAlgorithms\distances.py
 		VehicleRoutingAlgorithms\exampleInput.txt = VehicleRoutingAlgorithms\exampleInput.txt
 		VehicleRoutingAlgorithms\exampleOutput.txt = VehicleRoutingAlgorithms\exampleOutput.txt
+		VehicleRoutingAlgorithms\helper.py = VehicleRoutingAlgorithms\helper.py
 		VehicleRoutingAlgorithms\inputParser.py = VehicleRoutingAlgorithms\inputParser.py
 		VehicleRoutingAlgorithms\main.py = VehicleRoutingAlgorithms\main.py
 		VehicleRoutingAlgorithms\osrmHandling.py = VehicleRoutingAlgorithms\osrmHandling.py

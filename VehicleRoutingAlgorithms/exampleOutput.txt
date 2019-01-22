@@ -18,3 +18,4 @@
 4.0,4.0 # spawn
 50 # distance overall
 0.05 # time overall
+#List of sorted points with intermediate points to interpolate the route

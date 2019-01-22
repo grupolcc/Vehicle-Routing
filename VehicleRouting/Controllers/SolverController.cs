@@ -49,6 +49,7 @@ namespace VehicleRouting.Controllers
             {
                 LocationsViewModel = locationsModel,
                 AlgorithmResult = algorithm.GetRoutes(),
+                AlgorithmDetailedResult = algorithm.GetDetailedRoutes(),
                 TimeAndDistance = algorithm.GetTimeAndDistance()
             };
 

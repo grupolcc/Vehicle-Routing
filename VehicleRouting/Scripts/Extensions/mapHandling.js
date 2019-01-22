@@ -93,8 +93,7 @@ function showResults(vehicles, pointsOfDelivery, results) {
     for (var key in results) {
         if (results.hasOwnProperty(key)) {
             var randomColor = '#' + (Math.random() * 0xFFFFFF << 0).toString(16);
-            var points = getIntermediatePoints(results[key]);
-            var lineLayer = getLineLayer(points, randomColor);
+            var lineLayer = getLineLayer(results[key], randomColor);
             map.addLayer(lineLayer);
             layers[key] = lineLayer;
         }
@@ -153,37 +152,6 @@ function getSeparateLayer(vehicleID) {
         }
     }
     map.addLayer(layers[vehicleID]);
-}
-
-function getPointsBetweenTwoPoints(pointA, pointB) {
-    var pts = [];
-
-    var xmlHttp = new XMLHttpRequest();
-    var server = "http://94.245.106.244:5000"; //change to http://router.project-osrm.org for demo server (handles 5000 requests/min)
-    xmlHttp.open("GET", server + "/route/v1/driving/" + pointA[0] + ',' + pointA[1] + ';' + pointB[0] + ',' + pointB[1] + "?steps=true&geometries=polyline&overview=false", false);
-    xmlHttp.send(null);
-    var jsonResponse = JSON.parse(xmlHttp.responseText);
-
-    var points = jsonResponse.routes[0].legs[0].steps;
-
-    for (var i = 0; i < points.length; i++) {
-        for (var j = 0; j < points[i].intersections.length; j++) {
-            pts.push(points[i].intersections[j].location);
-        }
-    }
-
-    return pts;
-}
-
-function getIntermediatePoints(points) {
-    var pts = [];
-    for (var i = 0; i < points.length; i++) {
-        pts.push(points[i]);
-        if (i + 1 < points.length) {          
-            pts.push.apply(pts, getPointsBetweenTwoPoints(points[i], points[i + 1]));
-        } 
-    }
-    return pts;
 }
 
 function getLineLayer(points, col) {

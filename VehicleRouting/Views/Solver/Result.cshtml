@@ -31,16 +31,14 @@
             @:pointsOfDelivery.push([@pointOfDelivery.CoordX, @pointOfDelivery.CoordY]);
         }
 
-        @foreach (int vehicleID in Model.AlgorithmResult.Keys)
+        @foreach (int vehicleID in Model.AlgorithmDetailedResult.Keys)
         {
             @:var list = [];
 
-            foreach (ValueTuple<float, float> value in Model.AlgorithmResult[vehicleID])
+            foreach (ValueTuple<float, float> value in Model.AlgorithmDetailedResult[vehicleID])
             {
                  @:list.push([@value.Item1, @value.Item2]);
             }
-
-            @:list.push([@Model.AlgorithmResult[vehicleID][0].Item1, @Model.AlgorithmResult[vehicleID][0].Item2]);
 
             @:results[@vehicleID] = list;
         }
@@ -72,7 +70,7 @@
                 int i;
             }
             S@(vehicleID) =>
-            @for (i = 1; i < Model.AlgorithmResult[vehicleID].Count; i++)
+            @for (i = 1; i < Model.AlgorithmResult[vehicleID].Count - 1; i++)
             {
                 var tuple = Model.AlgorithmResult[vehicleID][i];
 

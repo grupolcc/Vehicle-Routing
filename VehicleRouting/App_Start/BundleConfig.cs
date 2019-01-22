@@ -9,7 +9,7 @@ namespace VehicleRouting
         {
             bundles.Add(new ScriptBundle("~/bundles/openlayers").IncludeDirectory(
                 "~/Scripts/OpenLayers", "*.js", true).IncludeDirectory(
-                "~/Scripts/OpenLayersExtensions", "*.js", true));
+                "~/Scripts/Extensions", "*.js", true));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                 "~/Scripts/jquery-{version}.js"));
