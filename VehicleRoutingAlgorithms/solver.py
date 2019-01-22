@@ -3,6 +3,7 @@ from ortools.constraint_solver import pywrapcp
 from ortools.constraint_solver import routing_enums_pb2
 from distances import *
 from osrmHandling import *
+from helper import *
 
 def createDistanceCallback(metricID, data):
     """Creates callback to return distance between points."""
@@ -50,10 +51,17 @@ def printSolutionOnConsole(solution, distance, t):
 
 def saveToOutputFile(vehicleID, points, overallDistance, t):
     listOfStrings = []
+    points.append(points[0])
     for p in points:
-        listOfStrings.append(str(p).replace('[', '').replace(']', '').replace(' ', '')+'\n')
+        listOfStrings.append(prettyPoint(p))
     listOfStrings.append(str(overallDistance) + '\n')
-    listOfStrings.append(str(t))
+    listOfStrings.append(str(t) + '\n')
+
+    intermediatePoints = getRoutingAsSortedList(points)
+    listOfStrings.append(prettyPoint(points[0]))
+    for p in intermediatePoints:
+        listOfStrings.append(prettyPoint(p))
+    listOfStrings.append(prettyPoint(points[0]))
 
     with open('output' + str(vehicleID) + '.txt', 'w') as file:
         file.writelines(listOfStrings)

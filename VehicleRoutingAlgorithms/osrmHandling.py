@@ -9,7 +9,7 @@ def getJsonDataFromOSRM(query):
     jsonData = contents.json()
     return jsonData
 
-def getRoutingFromListOfPoints(points):
+def getRoutingAsJson(points):
     pointsList = ""
     for p in points[:-1]:
         pointsList += str(p[0]) + ',' + str(p[1]) + ';'
@@ -17,6 +17,17 @@ def getRoutingFromListOfPoints(points):
     query = "/route/v1/driving/" + pointsList + "?steps=true&geometries=polyline&overview=false"
     return getJsonDataFromOSRM(query)
 
+def getRoutingAsSortedList(points):
+    jsonData = getRoutingAsJson(points)
+    legs = jsonData["routes"][0]["legs"]
+    points = []
+    for a in legs:
+        for x in a["steps"]:
+            for y in x["intersections"]:
+                points.append(y["location"])
+    return points
+
+
 def getRoutingDistanceFromListOfPoints(points):
-    return getRoutingFromListOfPoints(points)["routes"][0]["distance"]
+    return getRoutingAsJson(points)["routes"][0]["distance"]
         
