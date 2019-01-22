@@ -1,14 +1,16 @@
 import sys
 from constants import *
 
-def printParseError():
+
+def print_parse_error():
     print("Usage: main.py vehicleID [metricID]")
     print("Example: main.py 2")
     print("Example: main.py 3 1")
 
-def parseInput():
+
+def parse_input():
     if len(sys.argv) < 2 or len(sys.argv) > 3:
-        printParseError()
+        print_parse_error()
         sys.exit(0)
     try:
         vehicleID = int(sys.argv[1])
@@ -17,6 +19,6 @@ def parseInput():
         else:
             metricID = OSRM_METRIC
     except ValueError:
-        printParseError()
+        print_parse_error()
         sys.exit(0)
     return vehicleID, metricID
