@@ -9,15 +9,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleRouting.Tests", "Veh
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VehicleRoutingAlgorithms", "VehicleRoutingAlgorithms", "{5DB50D0F-3B67-4E91-8677-AB09EFF2EB63}"
 	ProjectSection(SolutionItems) = preProject
-		VehicleRoutingAlgorithms\bruteForce.py = VehicleRoutingAlgorithms\bruteForce.py
+		VehicleRoutingAlgorithms\brute_force.py = VehicleRoutingAlgorithms\brute_force.py
 		VehicleRoutingAlgorithms\constants.py = VehicleRoutingAlgorithms\constants.py
 		VehicleRoutingAlgorithms\distances.py = VehicleRoutingAlgorithms\distances.py
 		VehicleRoutingAlgorithms\exampleInput.txt = VehicleRoutingAlgorithms\exampleInput.txt
 		VehicleRoutingAlgorithms\exampleOutput.txt = VehicleRoutingAlgorithms\exampleOutput.txt
 		VehicleRoutingAlgorithms\helper.py = VehicleRoutingAlgorithms\helper.py
-		VehicleRoutingAlgorithms\inputParser.py = VehicleRoutingAlgorithms\inputParser.py
+		VehicleRoutingAlgorithms\input_parser.py = VehicleRoutingAlgorithms\input_parser.py
 		VehicleRoutingAlgorithms\main.py = VehicleRoutingAlgorithms\main.py
-		VehicleRoutingAlgorithms\osrmHandling.py = VehicleRoutingAlgorithms\osrmHandling.py
+		VehicleRoutingAlgorithms\osrm_handling.py = VehicleRoutingAlgorithms\osrm_handling.py
 		VehicleRoutingAlgorithms\solver.py = VehicleRoutingAlgorithms\solver.py
 	EndProjectSection
 EndProject
