@@ -1,4 +1,5 @@
 import requests
+from custom_exceptions import *
 
 
 # Calculated with use of http://project-osrm.org/
@@ -7,6 +8,9 @@ def get_json_data_from_osrm(query):
     url = webserver + query
     contents = requests.get(url=url)
     json_data = contents.json()
+    if "message" in json_data:
+        if "Too Many Requests" in json_data["message"]:
+            raise TooManyRequestsException("Too many requests. OSRM server seems to be overloaded!")
     return json_data
 
 

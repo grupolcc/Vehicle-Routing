@@ -11,6 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VehicleRoutingAlgorithms", 
 	ProjectSection(SolutionItems) = preProject
 		VehicleRoutingAlgorithms\brute_force.py = VehicleRoutingAlgorithms\brute_force.py
 		VehicleRoutingAlgorithms\constants.py = VehicleRoutingAlgorithms\constants.py
+		VehicleRoutingAlgorithms\custom_exceptions.py = VehicleRoutingAlgorithms\custom_exceptions.py
 		VehicleRoutingAlgorithms\distances.py = VehicleRoutingAlgorithms\distances.py
 		VehicleRoutingAlgorithms\exampleInput.txt = VehicleRoutingAlgorithms\exampleInput.txt
 		VehicleRoutingAlgorithms\exampleOutput.txt = VehicleRoutingAlgorithms\exampleOutput.txt
