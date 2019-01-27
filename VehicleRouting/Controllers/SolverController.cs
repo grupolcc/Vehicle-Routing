@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.ServiceModel;
 using System.Web.Mvc;
 using VehicleRouting.Logic;
 using VehicleRouting.Models;
@@ -44,15 +46,26 @@ namespace VehicleRouting.Controllers
             };
 
             var algorithm = new VehicleRoutingAlgorithm(solverReturnViewModel);
+            var solverResultViewModel = new SolverResultViewModel();
 
-            SolverResultViewModel solverResultViewModel = new SolverResultViewModel
+            try
             {
-                LocationsViewModel = locationsModel,
-                AlgorithmResult = algorithm.GetRoutes(),
-                AlgorithmDetailedResult = algorithm.GetDetailedRoutes(),
-                TimeAndDistance = algorithm.GetTimeAndDistance()
-            };
+                solverResultViewModel.LocationsViewModel = locationsModel;
+                solverResultViewModel.AlgorithmResult = algorithm.GetRoutes();
+                solverResultViewModel.AlgorithmDetailedResult = algorithm.GetDetailedRoutes();
+                solverResultViewModel.TimeAndDistance = algorithm.GetTimeAndDistance();
 
+            }
+            catch (TimeoutException ex)
+            {
+                this.ViewBag.Error = "Algorithm execution timed out. Possibly too much input data or OSRM server not responding.";
+                return this.View("Error");
+            }
+            catch (CommunicationException ex)
+            {
+                this.ViewBag.Error = "Algorithm execution failed!";
+                return this.View("Error");
+            }
             return this.View("Result", solverResultViewModel);
         }
     }

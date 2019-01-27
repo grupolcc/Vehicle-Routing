@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.ServiceModel;
 using VehicleRouting.Models;
 
 namespace VehicleRouting.Logic
@@ -139,19 +140,24 @@ namespace VehicleRouting.Logic
 
         private void RunPythonAlgorithm(int vehicleID)
         {
-            //TODO: implement some checks if the script was executed successfully and created output files since for now we rely on the assumption that "THIS WORKS" :D
-
             System.Diagnostics.Process process = new System.Diagnostics.Process();
             System.Diagnostics.ProcessStartInfo startInfo =
                 new System.Diagnostics.ProcessStartInfo
                 {
                     WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden,
                     FileName = "cmd.exe",
-                    Arguments = $"/C cd /D \"{this.projectBin}\" & python main.py {vehicleID} {this.solverReturnViewModel.MetricType}"
+                    Arguments = $"/C cd /D \"{this.projectBin}\" & python main.py {vehicleID} {this.solverReturnViewModel.MetricType}",
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false
                 };
             process.StartInfo = startInfo;
             process.Start();
-            process.WaitForExit();
+            if (!process.WaitForExit((int)TimeSpan.FromMinutes(2).TotalMilliseconds))
+                throw new TimeoutException("Python algorithm timeout (possibly too much data, use CLI version)");
+            string stderr = process.StandardError.ReadToEnd();
+            if ( stderr!= string.Empty || process.ExitCode != 0)
+                throw new CommunicationException($"Python scripts failed! {stderr}");
         }
 
         private List<ValueTuple<float, float>> ParseDetailedOutput(int vehicleID)
