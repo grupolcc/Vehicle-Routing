@@ -15,11 +15,11 @@ namespace VehicleRouting.Logic
 
         private readonly string projectBin = $"{System.Web.HttpContext.Current.Server.MapPath("~")}bin";
 
-        private Dictionary<int, List<ValueTuple<float, float>>> inputData;
+        private Dictionary<int, List<(float, float)>> inputData;
 
-        private readonly Dictionary<int, List<ValueTuple<float, float>>> detailedOutput = new Dictionary<int, List<ValueTuple<float, float>>>();
+        private readonly Dictionary<int, List<(float, float)>> detailedOutput = new Dictionary<int, List<(float, float)>>();
 
-        private Dictionary<int, int> outputSeparators = new Dictionary<int, int>();
+        private readonly Dictionary<int, int> outputSeparators = new Dictionary<int, int>();
 
         public VehicleRoutingAlgorithm(SolverReturnViewModel solverReturnViewModel)
         {
@@ -30,9 +30,9 @@ namespace VehicleRouting.Logic
         ///     Get best routes for all the vehicles that have some product packs inside them.
         /// </summary>
         /// <returns> Dictionary containing vehicle ids as keys and list of sorted points to reach as value. </returns>
-        public Dictionary<int, List<ValueTuple<float, float>>> GetRoutes()
+        public Dictionary<int, List<(float, float)>> GetRoutes()
         {
-            var dict = new Dictionary<int, List<ValueTuple<float, float>>>();
+            var dict = new Dictionary<int, List<(float, float)>>();
 
             this.inputData = this.CreateInputData();
 
@@ -51,7 +51,7 @@ namespace VehicleRouting.Logic
         ///     Get best routes for all the vehicles that have some product packs inside them.
         /// </summary>
         /// <returns> Dictionary containing vehicle ids as keys and list of sorted points to reach as value (including intermediate points). </returns>
-        public Dictionary<int, List<ValueTuple<float, float>>> GetDetailedRoutes()
+        public Dictionary<int, List<(float, float)>> GetDetailedRoutes()
         {
             if (this.detailedOutput == null)
                 this.GetRoutes();
@@ -62,14 +62,14 @@ namespace VehicleRouting.Logic
         ///     Get a dictionary containing time of computing and distance for each vehicle after algorithm execution
         /// </summary>
         /// <returns> Dictionary containing vehicle ids as keys and time and distance as values. </returns>
-        public Dictionary<int, ValueTuple<float, float>> GetTimeAndDistance()
+        public Dictionary<int, (float, float)> GetTimeAndDistance()
         {
-            var dict = new Dictionary<int, ValueTuple<float, float>>();
+            var dict = new Dictionary<int, (float, float)>();
 
             foreach (var key in this.inputData.Keys)
             {
                 var lines = File.ReadLines($"{this.projectBin}\\output{key}.txt").ToList();
-                dict.Add(key, new ValueTuple<float, float>(float.Parse(lines[this.outputSeparators[key] + 1]), float.Parse(lines[this.outputSeparators[key] + 2])));
+                dict.Add(key, (float.Parse(lines[this.outputSeparators[key] + 1]), float.Parse(lines[this.outputSeparators[key] + 2])));
             }
 
             return dict;
@@ -80,18 +80,18 @@ namespace VehicleRouting.Logic
         /// </summary>
         /// <param name="ID"> Product pack ID. </param>
         /// <returns> Point of Delivery location of given product pack (by ID). </returns>
-        private ValueTuple<float, float> GetPointOfDeliveryLocationFromProductPackID(int ID)
+        private (float, float) GetPointOfDeliveryLocationFromProductPackID(int ID)
         {
             var pointOfDelivery = this.db.ProductPacks.First(v => v.ID == ID).PointOfDelivery;
 
-            return new ValueTuple<float, float>(pointOfDelivery.CoordX, pointOfDelivery.CoordY);
+            return (pointOfDelivery.CoordX, pointOfDelivery.CoordY);
         }
 
         /// <summary>
         ///     Creates input data.
         /// </summary>
         /// <returns> Dictionary containing vehicle ids as keys and list of points to reach (not sorted) as value. </returns>
-        private Dictionary<int, List<ValueTuple<float, float>>> CreateInputData()
+        private Dictionary<int, List<(float, float)>> CreateInputData()
         {
             var dict = new Dictionary<int, List<int>>();
 
@@ -105,7 +105,7 @@ namespace VehicleRouting.Logic
                     dict.Add(key, new List<int> {value});
             }
 
-            var resultdict = new Dictionary<int, List<ValueTuple<float, float>>>();
+            var resultdict = new Dictionary<int, List<(float, float)>>();
 
             foreach (int key in dict.Keys)
             {
@@ -122,14 +122,14 @@ namespace VehicleRouting.Logic
         /// <param name="vehicle"> Vehicle that we are generating the route for. </param>
         /// <param name="pointsOfDelivery"> List of points to reach (not sorted) </param>
         /// <returns> List of sorted points to reach </returns>
-        private List<ValueTuple<float, float>> RunAlgorithm(int vehicle, List<ValueTuple<float, float>> pointsOfDelivery)
+        private List<(float, float)> RunAlgorithm(int vehicle, List<(float, float)> pointsOfDelivery)
         {
             this.CreateInputFile(vehicle, pointsOfDelivery);
             this.RunPythonAlgorithm(vehicle);
             return this.ParseOutputFile(vehicle);
         }
 
-        private void CreateInputFile(int vehicleID, List<ValueTuple<float, float>> pointsOfDelivery)
+        private void CreateInputFile(int vehicleID, List<(float, float)> pointsOfDelivery)
         {
             string filePath = $"{this.projectBin}\\input{vehicleID}.txt";
             var veh = this.db.Vehicles.First(v => v.ID == vehicleID);
@@ -160,22 +160,22 @@ namespace VehicleRouting.Logic
                 throw new CommunicationException($"Python scripts failed! {stderr}");
         }
 
-        private List<ValueTuple<float, float>> ParseDetailedOutput(int vehicleID)
+        private List<(float, float)> ParseDetailedOutput(int vehicleID)
         {
             var lines = File.ReadLines($"{this.projectBin}\\output{vehicleID}.txt").Skip(this.outputSeparators[vehicleID] + 3);
             return this.ParseLines(lines);
         }
 
-        private List<ValueTuple<float, float>> ParseOutputFile(int vehicleID)
+        private List<(float, float)> ParseOutputFile(int vehicleID)
         {
             var lines = File.ReadLines($"{this.projectBin}\\output{vehicleID}.txt");
             return this.ParseLines(lines);
         }
 
-        private List<ValueTuple<float, float>> ParseLines(IEnumerable<string> lines)
+        private List<(float, float)> ParseLines(IEnumerable<string> lines)
         {
-            return lines.TakeWhile(line => line.Contains(',')).Select(line => line.Split(',')).Select(splits =>
-                new ValueTuple<float, float>(float.Parse(splits[0]), float.Parse(splits[1]))).ToList();
+            return lines.TakeWhile(line => line.Contains(',')).Select(line => line.Split(','))
+                .Select(splits => (float.Parse(splits[0]), float.Parse(splits[1]))).ToList();
         }
     }
 }

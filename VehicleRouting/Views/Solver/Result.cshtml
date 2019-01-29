@@ -35,7 +35,7 @@
         {
             @:var list = [];
 
-            foreach (ValueTuple<float, float> value in Model.AlgorithmDetailedResult[vehicleID])
+            foreach ((float, float) value in Model.AlgorithmDetailedResult[vehicleID])
             {
                  @:list.push([@value.Item1, @value.Item2]);
             }

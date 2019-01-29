@@ -37,12 +37,12 @@ namespace VehicleRouting.Models
         /// <summary>
         ///     Dictionary of keys - vehicle ids, values - sorted list of points they have to reach
         /// </summary>
-        public Dictionary<int, List<ValueTuple<float, float>>> AlgorithmResult { get; set; }
+        public Dictionary<int, List<(float, float)>> AlgorithmResult { get; set; }
 
         /// <summary>
         ///     Dictionary of keys - vehicle ids, values - sorted list of points they have to reach including intermediate points
         /// </summary>
-        public Dictionary<int, List<ValueTuple<float, float>>> AlgorithmDetailedResult { get; set; }
+        public Dictionary<int, List<(float, float)>> AlgorithmDetailedResult { get; set; }
 
         /// <summary>
         ///     Dictionary of keys - vehicle ids, values - time of algorithm execution and total distance calculated
