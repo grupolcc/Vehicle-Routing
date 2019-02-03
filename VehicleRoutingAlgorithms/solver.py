@@ -6,7 +6,7 @@ from osrm_handling import *
 from helper import *
 
 
-def create_distance_callback(metricID, data):
+def create_distance_callback(algorithm_ID, data):
     """Creates callback to return distance between points."""
     _distances = {}
 
@@ -17,7 +17,7 @@ def create_distance_callback(metricID, data):
                 _distances[from_node][to_node] = 0
             else:
                 _distances[from_node][to_node] = (
-                    calculate_distance(metricID, data[from_node], data[to_node]))
+                    calculate_distance(algorithm_ID, data[from_node], data[to_node]))
 
     def distance_callback(from_node, to_node):
         """Returns the distance between the two nodes"""
@@ -45,12 +45,12 @@ def print_solution_on_console(solution, distance, t):
     for item in solution[0:len(solution)]:
         output += ' {} ->'.format(item)
     output += ' {0}'.format(solution[0])
-    output += ' \nnumber of points: {0}'.format(str(len(solution)))
+    output += ' \nNumber of points: {0}'.format(str(len(solution)))
     output += ' \nDistance of route: {0}m\nTime: {1}\n'.format(distance, t)
     print(output)
 
 
-def save_to_output_file(vehicle_id, points, overall_distance, t):
+def save_to_output_file(input_file, points, overall_distance, t):
     list_of_strings = []
     points.append(points[0])
     for p in points:
@@ -64,7 +64,7 @@ def save_to_output_file(vehicle_id, points, overall_distance, t):
         list_of_strings.append(pretty_point(p))
     list_of_strings.append(pretty_point(points[0]))
 
-    with open('output' + str(vehicle_id) + '.txt', 'w') as file:
+    with open('output' + str(input_file), 'w') as file:
         file.writelines(list_of_strings)
 
 
