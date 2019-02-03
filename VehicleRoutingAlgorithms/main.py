@@ -13,7 +13,7 @@ def find_routing(coords):
     routing = pywrapcp.RoutingModel(len(coords), 1, 0)
 
     # Define weight of each edge
-    distance_callback = create_distance_callback(metricID, coords)
+    distance_callback = create_distance_callback(algorithm_ID, coords)
     routing.SetArcCostEvaluatorOfAllVehicles(distance_callback)
     add_distance_dimension(routing, distance_callback)
 
@@ -27,14 +27,14 @@ def find_routing(coords):
         solution, overallDistance, points = get_solution(coords, routing, assignment)
         t = timeit.default_timer() - start
         print_solution_on_console(solution, overallDistance, t)
-        save_to_output_file(vehicleID, points, overallDistance, t)
+        save_to_output_file(input_file, points, overallDistance, t)
 
 
 if __name__ == '__main__':
-    vehicleID, metricID = parse_input()
-    with open('input' + str(vehicleID) + '.txt') as f:
+    input_file, algorithm_ID = parse_input()
+    with open(str(input_file)) as f:
         locations = [tuple(map(float, i.split(','))) for i in f]
-    if metricID != BRUTE_FORCE:
+    if algorithm_ID != BRUTE_FORCE:
         find_routing(locations)
     else:
         brute_force(locations)

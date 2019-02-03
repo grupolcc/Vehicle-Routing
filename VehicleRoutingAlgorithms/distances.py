@@ -5,9 +5,9 @@ from osrm_handling import *
 
 # Set default distance calculator here
 def calculate_distance(metric_id, position_1, position_2):
-    if metric_id == OSRM_METRIC:
+    if metric_id == OSRM_ALGORITHM:
         return actual_distance(position_1, position_2)
-    elif metric_id == MANHATTAN_METRIC:
+    elif metric_id == MANHATTAN_ALGORITHM:
         return manhattan_distance(position_1, position_2)
     else:
         print("Metric id {0} not recognized".format(metric_id))

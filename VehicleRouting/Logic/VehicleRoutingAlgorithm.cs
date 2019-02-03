@@ -68,7 +68,7 @@ namespace VehicleRouting.Logic
 
             foreach (var key in this.inputData.Keys)
             {
-                var lines = File.ReadLines($"{this.projectBin}\\output{key}.txt").ToList();
+                var lines = File.ReadLines($"{this.projectBin}\\output{key}.data").ToList();
                 dict.Add(key, (float.Parse(lines[this.outputSeparators[key] + 1]), float.Parse(lines[this.outputSeparators[key] + 2])));
             }
 
@@ -124,21 +124,23 @@ namespace VehicleRouting.Logic
         /// <returns> List of sorted points to reach </returns>
         private List<(float, float)> RunAlgorithm(int vehicle, List<(float, float)> pointsOfDelivery)
         {
-            this.CreateInputFile(vehicle, pointsOfDelivery);
-            this.RunPythonAlgorithm(vehicle);
+            string filename = this.CreateInputFile(vehicle, pointsOfDelivery);
+            this.RunPythonAlgorithm(filename);
             return this.ParseOutputFile(vehicle);
         }
 
-        private void CreateInputFile(int vehicleID, List<(float, float)> pointsOfDelivery)
+        private string CreateInputFile(int vehicleID, List<(float, float)> pointsOfDelivery)
         {
-            string filePath = $"{this.projectBin}\\input{vehicleID}.txt";
+            string filename = $"{vehicleID}.data";
+            string filePath = $"{this.projectBin}\\{filename}";
             var veh = this.db.Vehicles.First(v => v.ID == vehicleID);
             var contents = new List<string> {$"{veh.SpawnPointX},{veh.SpawnPointY}"};
             contents.AddRange(pointsOfDelivery.Select(valueTuple => $"{valueTuple.Item1},{valueTuple.Item2}"));
             File.WriteAllLines(filePath, contents);
+            return filename;
         }
 
-        private void RunPythonAlgorithm(int vehicleID)
+        private void RunPythonAlgorithm(string filename)
         {
             System.Diagnostics.Process process = new System.Diagnostics.Process();
             System.Diagnostics.ProcessStartInfo startInfo =
@@ -146,7 +148,7 @@ namespace VehicleRouting.Logic
                 {
                     WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden,
                     FileName = "cmd.exe",
-                    Arguments = $"/C cd /D \"{this.projectBin}\" & python main.py {vehicleID} {this.solverReturnViewModel.MetricType}",
+                    Arguments = $"/C cd /D \"{this.projectBin}\" & python main.py {filename} {this.solverReturnViewModel.MetricType}",
                     RedirectStandardError = true,
                     RedirectStandardOutput = true,
                     UseShellExecute = false
@@ -162,13 +164,13 @@ namespace VehicleRouting.Logic
 
         private List<(float, float)> ParseDetailedOutput(int vehicleID)
         {
-            var lines = File.ReadLines($"{this.projectBin}\\output{vehicleID}.txt").Skip(this.outputSeparators[vehicleID] + 3);
+            var lines = File.ReadLines($"{this.projectBin}\\output{vehicleID}.data").Skip(this.outputSeparators[vehicleID] + 3);
             return this.ParseLines(lines);
         }
 
         private List<(float, float)> ParseOutputFile(int vehicleID)
         {
-            var lines = File.ReadLines($"{this.projectBin}\\output{vehicleID}.txt");
+            var lines = File.ReadLines($"{this.projectBin}\\output{vehicleID}.data");
             return this.ParseLines(lines);
         }
 

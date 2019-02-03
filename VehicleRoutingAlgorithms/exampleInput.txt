@@ -1,18 +1,13 @@
-# Remove this line and all of the comments, first tuple are the coords of vehicle spawn, naming convention - inputID.txt
-4,4 # spawn point of vehicle
-2,0 # list of locations of points of delivery that we have to get to
-8,0
-0,1
-1,1
-5,2
-7,2
-3,3
-6,3
-5,5
-8,5
-1,6
-2,6
-3,7
-6,7
-0,8
-7,8
+# Remove this line and all of the comments, first tuple are the coords of vehicle spawn
+# Longitude, Latitude
+-73.98148,40.74705  # spawn point of vehicle
+-73.98728,40.75046  # list of locations of points of delivery that we have to get to
+-73.9848,40.74818
+-73.98289,40.74784
+-73.98235,40.74582
+-73.99094,40.74544
+-73.9777,40.7522
+-73.9855,40.7529
+-73.8892,41.3578
+-73.9578,40.7745
+-73.9967,40.7335
