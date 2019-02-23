@@ -39,6 +39,8 @@ namespace VehicleRouting.Controllers
         [AllowAnonymous]
         public ActionResult Index(SolverReturnViewModel solverReturnViewModel)
         {
+            if (!this.ModelState.IsValid) return this.Index();
+
             LocationsViewModel locationsModel = new LocationsViewModel
             {
                 PointsOfDelivery = this.db.PointsOfDeliveries.ToList(),
@@ -58,7 +60,8 @@ namespace VehicleRouting.Controllers
             }
             catch (TimeoutException ex)
             {
-                this.ViewBag.Error = "Algorithm execution timed out. Possibly too much input data or OSRM server not responding.";
+                this.ViewBag.Error =
+                    "Algorithm execution timed out. Possibly too much input data or OSRM server not responding.";
                 return this.View("Error");
             }
             catch (CommunicationException ex)
@@ -66,7 +69,9 @@ namespace VehicleRouting.Controllers
                 this.ViewBag.Error = "Algorithm execution failed!";
                 return this.View("Error");
             }
+
             return this.View("Result", solverResultViewModel);
+
         }
     }
 }
