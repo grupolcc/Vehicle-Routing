@@ -4,7 +4,7 @@ from custom_exceptions import *
 
 # Calculated with use of http://project-osrm.org/
 def get_json_data_from_osrm(query):
-    webserver = "http://94.245.106.244:5000"  # change to http://router.project-osrm.org for demo server (handles 5000 requests/min)
+    webserver = "http://23.102.33.29"  # change to http://router.project-osrm.org for demo server (handles 5000 requests/min)
     url = webserver + query
     contents = requests.get(url=url)
     json_data = contents.json()
