@@ -39,6 +39,6 @@ Current supported algorithms:
 
 For more information contact kamil.lepek94@gmail.com
 ## Requirements to run this app
-* Install OR-TOOLS
+* Required python packages: requests, ortools, itertools
 * Host your own [OSRM server](https://github.com/Project-OSRM/osrm-backend) or change webserver in [this file](/VehicleRoutingAlgorithms/osrm_handling.py) to default.
 The default server handles only 5000 requests overall per minute so it might block your requests.

@@ -158,8 +158,9 @@ namespace VehicleRouting.Logic
             if (!process.WaitForExit((int)TimeSpan.FromMinutes(2).TotalMilliseconds))
                 throw new TimeoutException("Python algorithm timeout (possibly too much data, use CLI version)");
             string stderr = process.StandardError.ReadToEnd();
-            if ( stderr!= string.Empty || process.ExitCode != 0)
-                throw new CommunicationException($"Python scripts failed! {stderr}");
+            if (stderr != string.Empty || process.ExitCode != 0)
+                throw new CommunicationException($"Python scripts failed! " +
+                    $"Check if you have installed required python packages \n{stderr}");
         }
 
         private List<(float, float)> ParseDetailedOutput(int vehicleID)
