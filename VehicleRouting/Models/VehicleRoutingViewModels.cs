@@ -48,5 +48,10 @@ namespace VehicleRouting.Models
         ///     Dictionary of keys - vehicle ids, values - time of algorithm execution and total distance calculated
         /// </summary>
         public Dictionary<int, ValueTuple<float,float>> TimeAndDistance { get; set; }
+
+        /// <summary>
+        ///     Dictionary of keys - vehicle ids, values - number of algorithm
+        /// </summary>
+        public Dictionary<int, int> AlgorithmUsed { get; set; }
     }
 }

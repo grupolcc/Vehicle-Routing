@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 
 namespace VehicleRouting.Models
@@ -48,6 +50,23 @@ namespace VehicleRouting.Models
         public virtual ICollection<ProductPack> ProductPacks { get; set; }
     }
 
+    public class ExecutionDuration
+    {
+        public int ID { get; set; }
+        public int AlgorithmID { get; set; }
+        public int PointsOfDeliveryCount { get; set; }
+        public int ExecutionCount { get; set; }
+
+        [NotMapped]
+        public TimeSpan MeanExecutionTime { get; set; }
+
+        public long MeanExecutionTimeTicks
+        {
+            get => this.MeanExecutionTime.Ticks;
+            set => this.MeanExecutionTime = TimeSpan.FromTicks(value);
+        }
+    }
+
     public class ProductPack
     {
         public int ID { get; set; }
@@ -70,5 +89,6 @@ namespace VehicleRouting.Models
         public DbSet<Product> Products { get; set; }
         public DbSet<PointOfDelivery> PointsOfDeliveries { get; set; }
         public DbSet<ProductPack> ProductPacks { get; set; }
+        public DbSet<ExecutionDuration> ExecutionDurations { get; set; }
     }
 }
