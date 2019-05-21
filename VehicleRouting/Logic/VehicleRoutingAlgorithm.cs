@@ -17,9 +17,22 @@ namespace VehicleRouting.Logic
 
         private Dictionary<int, List<(float, float)>> inputData;
 
+        private int currentAlgorithm;
+
+        public readonly Dictionary<int, int> VehicleAlgorithm = new Dictionary<int, int>();
+
+        public readonly Dictionary<int, (float, float)> TimesAndDistances = new Dictionary<int, (float, float)>();
+
         private readonly Dictionary<int, List<(float, float)>> detailedOutput = new Dictionary<int, List<(float, float)>>();
 
         private readonly Dictionary<int, int> outputSeparators = new Dictionary<int, int>();
+
+        private enum Algorithm
+        {
+            PathCheapestArc = 0,
+            PathCheapestArcSimplified = 1,
+            Definition = 2
+        }
 
         public VehicleRoutingAlgorithm(SolverReturnViewModel solverReturnViewModel)
         {
@@ -34,6 +47,8 @@ namespace VehicleRouting.Logic
         {
             var dict = new Dictionary<int, List<(float, float)>>();
 
+            this.TimesAndDistances.Clear();
+            this.VehicleAlgorithm.Clear();
             this.inputData = this.CreateInputData();
 
             foreach (int vehicle in this.inputData.Keys)
@@ -56,23 +71,6 @@ namespace VehicleRouting.Logic
             if (this.detailedOutput == null)
                 this.GetRoutes();
             return this.detailedOutput;
-        }
-
-        /// <summary>
-        ///     Get a dictionary containing time of computing and distance for each vehicle after algorithm execution
-        /// </summary>
-        /// <returns> Dictionary containing vehicle ids as keys and time and distance as values. </returns>
-        public Dictionary<int, (float, float)> GetTimeAndDistance()
-        {
-            var dict = new Dictionary<int, (float, float)>();
-
-            foreach (var key in this.inputData.Keys)
-            {
-                var lines = File.ReadLines($"{this.projectBin}\\output{key}.data").ToList();
-                dict.Add(key, (float.Parse(lines[this.outputSeparators[key] + 1]), float.Parse(lines[this.outputSeparators[key] + 2])));
-            }
-
-            return dict;
         }
 
         /// <summary>
@@ -105,15 +103,15 @@ namespace VehicleRouting.Logic
                     dict.Add(key, new List<int> {value});
             }
 
-            var resultdict = new Dictionary<int, List<(float, float)>>();
+            var resultDict = new Dictionary<int, List<(float, float)>>();
 
             foreach (int key in dict.Keys)
             {
                 var points = dict[key].Select(this.GetPointOfDeliveryLocationFromProductPackID).Distinct().ToList();
-                resultdict.Add(key, points);
+                resultDict.Add(key, points);
             }
 
-            return resultdict;
+            return resultDict;
         }
 
         /// <summary>
@@ -125,6 +123,8 @@ namespace VehicleRouting.Logic
         private List<(float, float)> RunAlgorithm(int vehicle, List<(float, float)> pointsOfDelivery)
         {
             string filename = this.CreateInputFile(vehicle, pointsOfDelivery);
+            this.currentAlgorithm = this.GetAlgorithm(pointsOfDelivery.Count);
+            this.VehicleAlgorithm.Add(vehicle, this.currentAlgorithm);
             this.RunPythonAlgorithm(filename);
             return this.ParseOutputFile(vehicle);
         }
@@ -142,13 +142,12 @@ namespace VehicleRouting.Logic
 
         private void RunPythonAlgorithm(string filename)
         {
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo =
-                new System.Diagnostics.ProcessStartInfo
+            var process = new System.Diagnostics.Process();
+            var startInfo = new System.Diagnostics.ProcessStartInfo
                 {
                     WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden,
                     FileName = "cmd.exe",
-                    Arguments = $"/C cd /D \"{this.projectBin}\" & python main.py {filename} {this.solverReturnViewModel.MetricType}",
+                    Arguments = $"/C cd /D \"{this.projectBin}\" & python main.py {filename} {this.currentAlgorithm}",
                     RedirectStandardError = true,
                     RedirectStandardOutput = true,
                     UseShellExecute = false
@@ -163,6 +162,30 @@ namespace VehicleRouting.Logic
                     $"Check if you have installed required python packages \n{stderr}");
         }
 
+        private int GetAlgorithm(int destinationCount)
+        {
+            int metricType = this.solverReturnViewModel.MetricType;
+            if (metricType != -1)
+                return metricType;
+
+            var (low, high) = this.GetThresholdsFromHistory();
+
+            if (destinationCount <= (low ?? 3))
+                return (int)Algorithm.Definition;
+            if (destinationCount <= (high ?? 8))
+                return (int)Algorithm.PathCheapestArc;
+            return (int)Algorithm.PathCheapestArcSimplified;
+        }
+
+        private (int? low, int? high) GetThresholdsFromHistory()
+        {
+            var data = this.db.ExecutionDurations.Where(e => e.ExecutionCount > 3).OrderBy(e => e.MeanExecutionTimeTicks).ToList();
+            var bruteForceThreshold = data.LastOrDefault(e => e.AlgorithmID == (int)Algorithm.Definition && e.MeanExecutionTime < TimeSpan.FromSeconds(20));
+            var osrmThreshold = data.LastOrDefault(e => e.AlgorithmID == (int)Algorithm.PathCheapestArc && e.MeanExecutionTime < TimeSpan.FromSeconds(20));
+
+            return (low: bruteForceThreshold?.PointsOfDeliveryCount, high: osrmThreshold?.PointsOfDeliveryCount);
+        }
+
         private List<(float, float)> ParseDetailedOutput(int vehicleID)
         {
             var lines = File.ReadLines($"{this.projectBin}\\output{vehicleID}.data").Skip(this.outputSeparators[vehicleID] + 3);
@@ -171,8 +194,36 @@ namespace VehicleRouting.Logic
 
         private List<(float, float)> ParseOutputFile(int vehicleID)
         {
-            var lines = File.ReadLines($"{this.projectBin}\\output{vehicleID}.data");
+            var lines = File.ReadLines($"{this.projectBin}\\output{vehicleID}.data").ToList();
+            this.UpdateTimesAndDistances(vehicleID, lines);
             return this.ParseLines(lines);
+        }
+
+        private void UpdateTimesAndDistances(int vehicleID, List<string> lines)
+        {
+            this.TimesAndDistances.Add(vehicleID, (float.Parse(lines[this.outputSeparators[vehicleID] + 2]), float.Parse(lines[this.outputSeparators[vehicleID] + 1])));
+            var durationEntry =  this.db.ExecutionDurations.ToList()
+                .SingleOrDefault(e => e.AlgorithmID == this.currentAlgorithm && e.PointsOfDeliveryCount == this.inputData[vehicleID].Count);
+            if (durationEntry == null)
+            {
+                this.db.ExecutionDurations.Add(new ExecutionDuration()
+                {
+                    ExecutionCount = 1,
+                    AlgorithmID = this.currentAlgorithm,
+                    MeanExecutionTime = TimeSpan.FromSeconds(this.TimesAndDistances[vehicleID].Item1),
+                    PointsOfDeliveryCount = this.inputData[vehicleID].Count
+                });
+            }
+            else
+            {
+                durationEntry.MeanExecutionTime = TimeSpan.FromTicks(
+                    (durationEntry.MeanExecutionTime.Ticks * durationEntry.ExecutionCount +
+                     TimeSpan.FromSeconds(this.TimesAndDistances[vehicleID].Item1).Ticks)
+                    / (durationEntry.ExecutionCount + 1));
+                durationEntry.ExecutionCount++;
+            }
+
+            this.db.SaveChanges();
         }
 
         private List<(float, float)> ParseLines(IEnumerable<string> lines)

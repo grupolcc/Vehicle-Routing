@@ -37,4 +37,4 @@ if __name__ == '__main__':
     if algorithm_ID != BRUTE_FORCE:
         find_routing(locations)
     else:
-        brute_force(locations)
+        brute_force(locations, input_file)

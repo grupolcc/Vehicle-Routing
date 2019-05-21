@@ -65,7 +65,20 @@
     {
         <div id="@("vehicle" + vehicleID)" onclick="getSeparateLayer(@vehicleID)" class="panel panel-default">
             @(Model.LocationsViewModel.Vehicles.First(v => v.ID == vehicleID).Name)
-            <br/>
+            @Html.Raw(" : ")
+            @switch (Model.AlgorithmUsed[vehicleID])
+            {
+                case 0:
+                    @Html.Raw("Path Cheapest Arc");
+                    break;
+                case 1:
+                    @Html.Raw("Path Cheapest Arc (simplified)");
+                    break;
+                case 2:
+                    @Html.Raw("Definition");
+                    break;
+            }
+            <br />
             @{
                 int i;
             }
@@ -79,11 +92,11 @@
                 @Html.Raw(" => ")
             }
             S@(vehicleID)
-            <br/>
+            <br />
             Time: @Model.TimeAndDistance[vehicleID].Item1 seconds
-            <br/>
+            <br />
             Distance: @Model.TimeAndDistance[vehicleID].Item2 meters
-            <br/>
+            <br />
         </div>
     }
 </div>

@@ -255,6 +255,10 @@
     <Compile Include="Migrations\201811280005226_foreign-keys.Designer.cs">
       <DependentUpon>201811280005226_foreign-keys.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905080312339_AddExecutionHistory.cs" />
+    <Compile Include="Migrations\201905080312339_AddExecutionHistory.Designer.cs">
+      <DependentUpon>201905080312339_AddExecutionHistory.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels\AccountBindingModels.cs" />
     <Compile Include="Models\AccountModels\AccountViewModels.cs" />
@@ -388,6 +392,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201811280005226_foreign-keys.resx">
       <DependentUpon>201811280005226_foreign-keys.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905080312339_AddExecutionHistory.resx">
+      <DependentUpon>201905080312339_AddExecutionHistory.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

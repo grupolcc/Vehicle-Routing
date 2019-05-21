@@ -55,7 +55,8 @@ namespace VehicleRouting.Controllers
                 solverResultViewModel.LocationsViewModel = locationsModel;
                 solverResultViewModel.AlgorithmResult = algorithm.GetRoutes();
                 solverResultViewModel.AlgorithmDetailedResult = algorithm.GetDetailedRoutes();
-                solverResultViewModel.TimeAndDistance = algorithm.GetTimeAndDistance();
+                solverResultViewModel.TimeAndDistance = algorithm.TimesAndDistances;
+                solverResultViewModel.AlgorithmUsed = algorithm.VehicleAlgorithm;
 
             }
             catch (TimeoutException ex)

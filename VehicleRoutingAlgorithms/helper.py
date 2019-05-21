@@ -1,2 +1,4 @@
+import re
+
 def pretty_point(point):
-    return str(point).replace('[', '').replace(']', '').replace(' ', '')+'\n'
+    return re.sub("[\[\]()\s]", '', str(point)) + '\n'
